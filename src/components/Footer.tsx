@@ -56,9 +56,9 @@ function Footer() {
             <div>
               <h4 className="text-white font-semibold mb-4">Contact</h4>
               <ul className="space-y-2">
-                <li className="text-gray-400">hello@servicehub.com</li>
-                <li className="text-gray-400">+1 (555) 123-4567</li>
-                <li className="text-gray-400">123 Business St<br/>Suite 100<br/>City, State 12345</li>
+                <li className="text-gray-400">budazimbud@gmail.com</li>
+                <li className="text-gray-400">+62895323496371</li>
+                <li className="text-gray-400">Denpasar, Bali</li>
               </ul>
             </div>
           </div>

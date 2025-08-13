@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import Footer from "@/components/Footer";
+import Navigation from "@/components/Navigation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -12,6 +13,125 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+// Interfaces
+interface Supporter {
+  name?: string;
+  initials: string;
+  testimonial?: string;
+  amount: number;
+  date: string;
+}
+
+interface SupportStats {
+  totalCoffees: number;
+  allNighters: number;
+  bugsFixed: number;
+  coffeeShops: number;
+}
+
+// Portfolio data with categories
+const portfolioData = [
+  {
+    id: 1,
+    category: "Web Development",
+    title: "Learning Management System",
+    description: "Comprehensive LMS platform with course management, student tracking, assignments, and interactive learning tools for educational institutions.",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop&crop=center",
+    tags: ["React", "Node.js", "MongoDB"],
+    year: "2024",
+    categoryColor: "blue",
+    categoryLabel: "Education"
+  },
+  {
+    id: 2,
+    category: "Web Development",
+    title: "Customer Relationship Management",
+    description: "Advanced CRM system with lead management, sales pipeline, customer analytics, and automated marketing campaigns for growing businesses.",
+    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=600&h=400&fit=crop&crop=center",
+    tags: ["Vue.js", "Laravel", "MySQL"],
+    year: "2023",
+    categoryColor: "green",
+    categoryLabel: "Enterprise"
+  },
+  {
+    id: 3,
+    category: "Web Development",
+    title: "Insurance Management System",
+    description: "Complete insurance platform with policy management, claims processing, customer portal, and automated underwriting for insurance companies.",
+    image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=400&fit=crop&crop=center",
+    tags: ["Angular", "Spring Boot", "PostgreSQL"],
+    year: "2022",
+    categoryColor: "purple",
+    categoryLabel: "Insurance"
+  },
+  {
+    id: 4,
+    category: "Web Development",
+    title: "Regional Business Development",
+    description: "Strategic business development platform with market analysis, partnership management, and growth tracking for regional expansion initiatives.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&crop=center",
+    tags: ["React", "Django", "Redis"],
+    year: "2021",
+    categoryColor: "orange",
+    categoryLabel: "Business"
+  },
+  {
+    id: 5,
+    category: "Mobile Apps",
+    title: "Medical Record System",
+    description: "Secure electronic health records system with patient management, appointment scheduling, and medical history tracking for healthcare providers.",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=600&h=400&fit=crop&crop=center",
+    tags: ["Next.js", "Node.js", "MongoDB"],
+    year: "2025",
+    categoryColor: "pink",
+    categoryLabel: "Healthcare"
+  },
+  {
+    id: 6,
+    category: "Web Development",
+    title: "Human Resource Information System",
+    description: "Comprehensive HRIS with employee management, payroll processing, performance tracking, and recruitment workflows for modern organizations.",
+    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop&crop=center",
+    tags: ["Vue.js", "PHP", "MySQL"],
+    year: "2023",
+    categoryColor: "indigo",
+    categoryLabel: "HR"
+  },
+  {
+    id: 7,
+    category: "E-commerce",
+    title: "Investment Management Platform",
+    description: "Advanced investment platform with portfolio management, real-time market data, risk analysis, and automated trading strategies for investors.",
+    image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop&crop=center",
+    tags: ["React", "Python", "PostgreSQL"],
+    year: "2022",
+    categoryColor: "emerald",
+    categoryLabel: "FinTech"
+  },
+  {
+    id: 8,
+    category: "E-commerce",
+    title: "Cryptocurrency Exchange",
+    description: "Secure cryptocurrency exchange platform with spot trading, futures, staking, and wallet management with advanced security features.",
+    image: "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&h=400&fit=crop&crop=center",
+    tags: ["Angular", "Node.js", "Redis"],
+    year: "2021",
+    categoryColor: "yellow",
+    categoryLabel: "Crypto"
+  },
+  {
+    id: 9,
+    category: "Mobile Apps",
+    title: "Sandbox Point of Sale",
+    description: "Modern POS system with inventory management, sales analytics, customer loyalty programs, and multi-payment gateway integration for retail businesses.",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&crop=center",
+    tags: ["Vue.js", "Laravel", "MySQL"],
+    year: "2024",
+    categoryColor: "teal",
+    categoryLabel: "Retail"
+  }
+];
 
 const services = [
   {
@@ -47,6 +167,124 @@ const services = [
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("All Projects");
+  
+  // Coffee Support States
+  const [customAmount, setCustomAmount] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedSupport, setSelectedSupport] = useState<{amount: number, type: string} | null>(null);
+  const [recentSupporters, setRecentSupporters] = useState<Supporter[]>([]);
+  const [supportStats, setSupportStats] = useState<SupportStats>({
+    totalCoffees: 342,
+    allNighters: 47,
+    bugsFixed: 1284,
+    coffeeShops: 23
+  });
+
+  // Filter portfolio items based on active filter
+  const filteredPortfolio = activeFilter === "All Projects" 
+    ? portfolioData 
+    : portfolioData.filter(item => item.category === activeFilter);
+
+  // Load recent supporters on component mount
+  useEffect(() => {
+    fetchRecentSupporters();
+  }, []);
+
+  // Function to fetch recent supporters from API
+  const fetchRecentSupporters = async () => {
+    try {
+      const response = await fetch('/api/support/recent');
+      if (response.ok) {
+        const data = await response.json();
+        setRecentSupporters(data.supporters || []);
+        setSupportStats(data.stats || supportStats);
+      }
+    } catch (error) {
+      console.error('Error fetching supporters:', error);
+    }
+  };
+
+  // Function to handle coffee support payment with modal
+  const handleSupport = async (amount: number, type: string) => {
+    setSelectedSupport({ amount, type });
+    setShowPaymentModal(true);
+  };
+
+  // Function to redirect to payment
+  const redirectToPayment = async (paymentMethod: string) => {
+    if (!selectedSupport) return;
+    
+    const { amount, type } = selectedSupport;
+    setIsProcessing(true);
+
+    try {
+      if (paymentMethod === 'trakteer') {
+        // Gunakan API untuk Trakteer
+        const response = await fetch('/api/support/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            amount,
+            type,
+            currency: 'USD',
+            paymentMethod: 'midtrans', // Trakteer menggunakan endpoint midtrans
+            name: 'Anonymous Supporter',
+            message: `Coffee support: ${type}`
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          window.open(data.paymentUrl, '_blank');
+        } else {
+          throw new Error('Failed to create payment');
+        }
+      } else {
+        // Direct redirect untuk platform lain
+        let paymentUrl = '';
+        switch (paymentMethod) {
+          case 'kofi':
+            paymentUrl = `https://ko-fi.com/azim/${amount}`;
+            break;
+          case 'bmac':
+            paymentUrl = `https://www.buymeacoffee.com/azim?amount=${amount}`;
+            break;
+          default:
+            paymentUrl = `https://trakteer.id/devazim/tip?open=true&quantity=${amount}`;
+        }
+        window.open(paymentUrl, '_blank');
+      }
+
+      setShowPaymentModal(false);
+      setSelectedSupport(null);
+      
+      // Update stats optimistically
+      setSupportStats(prev => ({
+        ...prev,
+        totalCoffees: prev.totalCoffees + Math.floor(amount / 5)
+      }));
+
+    } catch (error) {
+      console.error('Error processing payment:', error);
+      alert('Sorry, there was an error. Please try again.');
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  // Function to handle custom amount support
+  const handleCustomSupport = () => {
+    const amount = parseFloat(customAmount);
+    if (amount && amount >= 1) {
+      handleSupport(amount, 'custom');
+    } else {
+      alert('Please enter a valid amount (minimum $1)');
+    }
+  };
 
   const handleCardClick = (index: number) => {
     const newSlide = (currentSlide + index) % services.length;
@@ -85,6 +323,9 @@ export default function Home() {
 
   return (
     <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
+      {/* Navigation */}
+      <Navigation />
+      
       {/* Hero Section */}
       <div className="relative min-h-screen overflow-hidden">
         {/* Background Images with Transition */}
@@ -119,9 +360,17 @@ export default function Home() {
                 <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-md transition-all duration-500">
                   {currentService.description}
                 </p>
-                <button className="bg-blue-600 hover:bg-blue-700 transition-colors px-8 py-3 rounded-lg text-white font-medium">
-                  Get Started
-                </button>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button className="bg-blue-600 hover:bg-blue-700 transition-colors px-8 py-3 rounded-lg text-white font-medium">
+                    Get Started
+                  </button>
+                  <a 
+                    href="/workspace" 
+                    className="border border-white/30 hover:border-white/50 hover:bg-white/10 transition-all px-8 py-3 rounded-lg text-white font-medium text-center"
+                  >
+                    View Workspaces →
+                  </a>
+                </div>
               </div>
 
               {/* Slider Section */}
@@ -260,6 +509,173 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Workspace Showcase Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          }}></div>
+        </div>
+        
+        <div className="relative z-10 max-w-7xl mx-auto px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
+              Featured Workspaces
+            </h2>
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+              Discover amazing workspace setups from gaming rigs to productivity stations
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {/* Featured Workspace 1 */}
+            <div className="group bg-white/10 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-500 hover:-translate-y-2">
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src="/workspace_azim.webp"
+                  alt="Azim's Gaming Setup"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute top-4 left-4">
+                  <span className="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-medium">Featured</span>
+                </div>
+                <div className="absolute bottom-4 right-4">
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-blue-500 transition-colors duration-300">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-white mb-2">Azim's Gaming Setup</h3>
+                <p className="text-blue-100 mb-4">Complete gaming and productivity workspace with RGB lighting, dual monitors, and premium peripherals.</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="text-xs bg-blue-500/20 text-blue-200 px-2 py-1 rounded-full">Gaming</span>
+                  <span className="text-xs bg-purple-500/20 text-purple-200 px-2 py-1 rounded-full">RGB</span>
+                  <span className="text-xs bg-green-500/20 text-green-200 px-2 py-1 rounded-full">Dual Monitor</span>
+                </div>
+                <a 
+                  href="/workspace/azim-setup"
+                  className="inline-flex items-center text-blue-300 hover:text-white font-medium transition-colors duration-300"
+                >
+                  View Details →
+                </a>
+              </div>
+            </div>
+
+            {/* Featured Workspace 2 */}
+            <div className="group bg-white/10 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-500 hover:-translate-y-2">
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=400&fit=crop&crop=center"
+                  alt="Minimal Productivity Station"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute top-4 left-4">
+                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">Productivity</span>
+                </div>
+                <div className="absolute bottom-4 right-4">
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-green-500 transition-colors duration-300">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-white mb-2">Minimal Productivity Station</h3>
+                <p className="text-blue-100 mb-4">Clean and minimal setup focused on productivity with essential tools and ergonomic design.</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="text-xs bg-green-500/20 text-green-200 px-2 py-1 rounded-full">Minimal</span>
+                  <span className="text-xs bg-blue-500/20 text-blue-200 px-2 py-1 rounded-full">Productivity</span>
+                  <span className="text-xs bg-purple-500/20 text-purple-200 px-2 py-1 rounded-full">Ergonomic</span>
+                </div>
+                <a 
+                  href="/workspace/minimal-setup"
+                  className="inline-flex items-center text-green-300 hover:text-white font-medium transition-colors duration-300"
+                >
+                  View Details →
+                </a>
+              </div>
+            </div>
+
+            {/* Featured Workspace 3 */}
+            <div className="group bg-white/10 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-500 hover:-translate-y-2">
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1555421689-491a97ff2040?w=600&h=400&fit=crop&crop=center"
+                  alt="Professional Streaming Studio"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute top-4 left-4">
+                  <span className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium">Streaming</span>
+                </div>
+                <div className="absolute bottom-4 right-4">
+                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:bg-purple-500 transition-colors duration-300">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-white mb-2">Professional Streaming Studio</h3>
+                <p className="text-blue-100 mb-4">Professional streaming setup with high-end camera, lighting, and audio equipment.</p>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  <span className="text-xs bg-purple-500/20 text-purple-200 px-2 py-1 rounded-full">Streaming</span>
+                  <span className="text-xs bg-blue-500/20 text-blue-200 px-2 py-1 rounded-full">Professional</span>
+                  <span className="text-xs bg-green-500/20 text-green-200 px-2 py-1 rounded-full">Camera</span>
+                </div>
+                <a 
+                  href="/workspace/streaming-setup"
+                  className="inline-flex items-center text-purple-300 hover:text-white font-medium transition-colors duration-300"
+                >
+                  View Details →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* CTA Section */}
+          <div className="text-center">
+            <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-white/20">
+              <h3 className="text-3xl md:text-4xl font-light text-white mb-4">
+                Ready to Explore More?
+              </h3>
+              <p className="text-blue-100 text-lg mb-8 max-w-2xl mx-auto">
+                Discover hundreds of amazing workspace setups, from gaming rigs to productivity stations. 
+                Get inspired and find the perfect setup for your needs.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a 
+                  href="/workspace"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 hover:scale-105 transform"
+                >
+                  Browse All Workspaces →
+                </a>
+                <a 
+                  href="/workspace"
+                  className="border border-white/30 hover:border-white/50 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300"
+                >
+                  Submit Your Setup
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Benefits Section */}
       <section className="py-20 bg-gray-50">
@@ -456,7 +872,7 @@ export default function Home() {
                 </div>
                 <div className="ml-4">
                   <div className="font-semibold text-gray-900">Lisa Chen</div>
-                  <div className="text-gray-600 text-sm">Small Business Owner, Portland</div>
+                  <div className="text-gray-600 text-sm">Small Business Owner, Bali</div>
                 </div>
               </div>
             </div>
@@ -498,31 +914,29 @@ export default function Home() {
 
           {/* Portfolio Filter */}
           <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <button className="px-6 py-2 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors">
-              All Projects
-            </button>
-            <button className="px-6 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
-              Web Development
-            </button>
-            <button className="px-6 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
-              Mobile Apps
-            </button>
-            <button className="px-6 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
-              E-commerce
-            </button>
-            <button className="px-6 py-2 bg-gray-100 text-gray-700 rounded-full font-medium hover:bg-gray-200 transition-colors">
-              Branding
-            </button>
+            {["All Projects", "Web Development", "Mobile Apps", "E-commerce", "Branding"].map((filter) => (
+              <button
+                key={filter}
+                onClick={() => setActiveFilter(filter)}
+                className={`px-6 py-2 rounded-full font-medium transition-colors ${
+                  activeFilter === filter
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {filter}
+              </button>
+            ))}
           </div>
 
           {/* Portfolio Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Portfolio Item 1 */}
+            {/* Portfolio Item 1 - LMS */}
             <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
               <div className="relative overflow-hidden">
                 <Image
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop&crop=center"
-                  alt="E-commerce Platform"
+                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop&crop=center"
+                  alt="Learning Management System"
                   width={600}
                   height={400}
                   className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
@@ -546,11 +960,11 @@ export default function Home() {
               </div>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">E-commerce</span>
+                  <span className="text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Education</span>
                   <span className="text-sm text-gray-500">2024</span>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Sarah's Jewelry Store</h3>
-                <p className="text-gray-600 mb-4">Sarah wanted to sell handmade jewelry online but was overwhelmed by e-commerce platforms. I built her a simple, beautiful store that doubled her sales in 3 months.</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Learning Management System</h3>
+                <p className="text-gray-600 mb-4">Comprehensive LMS platform with course management, student tracking, assignments, and interactive learning tools for educational institutions.</p>
                 <div className="flex flex-wrap gap-2">
                   <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">React</span>
                   <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Node.js</span>
@@ -559,180 +973,12 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Portfolio Item 2 */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1555421689-491a97ff2040?w=600&h=400&fit=crop&crop=center"
-                  alt="Mobile Banking App"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full">Mobile App</span>
-                  <span className="text-sm text-gray-500">2024</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Budget Tracking App</h3>
-                <p className="text-gray-600 mb-4">A friend complained about complicated budgeting apps, so I built her a simple one. It worked so well, she convinced me to turn it into a real product.</p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">React Native</span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Firebase</span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Stripe</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 3 */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=400&fit=crop&crop=center"
-                  alt="Corporate Website"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Web Design</span>
-                  <span className="text-sm text-gray-500">2024</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Corporate Website Redesign</h3>
-                <p className="text-gray-600 mb-4">Complete redesign of a corporate website with modern UI/UX principles and enhanced user experience.</p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Next.js</span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Tailwind</span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Figma</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 4 */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&h=400&fit=crop&crop=center"
-                  alt="SaaS Dashboard"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full">SaaS</span>
-                  <span className="text-sm text-gray-500">2023</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Analytics Dashboard</h3>
-                <p className="text-gray-600 mb-4">Comprehensive analytics dashboard with real-time data visualization and advanced reporting features.</p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Vue.js</span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">D3.js</span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Python</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 5 */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=600&h=400&fit=crop&crop=center"
-                  alt="Brand Identity"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-pink-600 bg-pink-50 px-3 py-1 rounded-full">Branding</span>
-                  <span className="text-sm text-gray-500">2023</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Complete Brand Identity</h3>
-                <p className="text-gray-600 mb-4">Full brand identity design including logo, color palette, typography, and brand guidelines.</p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Illustrator</span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Photoshop</span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">InDesign</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 6 */}
+            {/* Portfolio Item 2 - CRM */}
             <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
               <div className="relative overflow-hidden">
                 <Image
                   src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=600&h=400&fit=crop&crop=center"
-                  alt="CRM System"
+                  alt="Customer Relationship Management"
                   width={600}
                   height={400}
                   className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
@@ -756,15 +1002,309 @@ export default function Home() {
               </div>
               <div className="p-6">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Enterprise</span>
-                  <span className="text-sm text-gray-500">2023</span>
+                  <span className="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full">Enterprise</span>
+                  <span className="text-sm text-gray-500">2024</span>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Custom CRM System</h3>
-                <p className="text-gray-600 mb-4">Enterprise-level CRM system with advanced lead management, analytics, and automation features.</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Customer Relationship Management</h3>
+                <p className="text-gray-600 mb-4">Advanced CRM system with lead management, sales pipeline, customer analytics, and automated marketing campaigns for growing businesses.</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Vue.js</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Laravel</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">MySQL</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Portfolio Item 3 - Insurance */}
+            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="relative overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=400&fit=crop&crop=center"
+                  alt="Insurance Management System"
+                  width={600}
+                  height={400}
+                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex space-x-4">
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </button>
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-purple-600 bg-purple-50 px-3 py-1 rounded-full">Insurance</span>
+                  <span className="text-sm text-gray-500">2024</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Insurance Management System</h3>
+                <p className="text-gray-600 mb-4">Complete insurance platform with policy management, claims processing, customer portal, and automated underwriting for insurance companies.</p>
                 <div className="flex flex-wrap gap-2">
                   <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Angular</span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Java</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Spring Boot</span>
                   <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">PostgreSQL</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Portfolio Item 4 - RBD */}
+            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="relative overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&crop=center"
+                  alt="Regional Business Development"
+                  width={600}
+                  height={400}
+                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex space-x-4">
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </button>
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full">Business</span>
+                  <span className="text-sm text-gray-500">2023</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Regional Business Development</h3>
+                <p className="text-gray-600 mb-4">Strategic business development platform with market analysis, partnership management, and growth tracking for regional expansion initiatives.</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">React</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Django</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Redis</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Portfolio Item 5 - Medical Record */}
+            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="relative overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=600&h=400&fit=crop&crop=center"
+                  alt="Medical Record System"
+                  width={600}
+                  height={400}
+                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex space-x-4">
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </button>
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-pink-600 bg-pink-50 px-3 py-1 rounded-full">Healthcare</span>
+                  <span className="text-sm text-gray-500">2023</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Medical Record System</h3>
+                <p className="text-gray-600 mb-4">Secure electronic health records system with patient management, appointment scheduling, and medical history tracking for healthcare providers.</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Next.js</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Node.js</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">MongoDB</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Portfolio Item 6 - HRIS */}
+            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="relative overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop&crop=center"
+                  alt="Human Resource Information System"
+                  width={600}
+                  height={400}
+                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex space-x-4">
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </button>
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">HR</span>
+                  <span className="text-sm text-gray-500">2023</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Human Resource Information System</h3>
+                <p className="text-gray-600 mb-4">Comprehensive HRIS with employee management, payroll processing, performance tracking, and recruitment workflows for modern organizations.</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Vue.js</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">PHP</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">MySQL</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Portfolio Item 7 - Investment */}
+            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="relative overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop&crop=center"
+                  alt="Investment Management Platform"
+                  width={600}
+                  height={400}
+                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex space-x-4">
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </button>
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">FinTech</span>
+                  <span className="text-sm text-gray-500">2023</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Investment Management Platform</h3>
+                <p className="text-gray-600 mb-4">Advanced investment platform with portfolio management, real-time market data, risk analysis, and automated trading strategies for investors.</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">React</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Python</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">PostgreSQL</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Portfolio Item 8 - Exchange */}
+            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="relative overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&h=400&fit=crop&crop=center"
+                  alt="Cryptocurrency Exchange"
+                  width={600}
+                  height={400}
+                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex space-x-4">
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </button>
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full">Crypto</span>
+                  <span className="text-sm text-gray-500">2022</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Cryptocurrency Exchange</h3>
+                <p className="text-gray-600 mb-4">Secure cryptocurrency exchange platform with spot trading, futures, staking, and wallet management with advanced security features.</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Angular</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Node.js</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Redis</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Portfolio Item 9 - Sandbox POS */}
+            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+              <div className="relative overflow-hidden">
+                <Image
+                  src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&crop=center"
+                  alt="Point of Sale System"
+                  width={600}
+                  height={400}
+                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="flex space-x-4">
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                    </button>
+                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-teal-600 bg-teal-50 px-3 py-1 rounded-full">Retail</span>
+                  <span className="text-sm text-gray-500">2022</span>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Sandbox Point of Sale</h3>
+                <p className="text-gray-600 mb-4">Modern POS system with inventory management, sales analytics, customer loyalty programs, and multi-payment gateway integration for retail businesses.</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Vue.js</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">Laravel</span>
+                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">MySQL</span>
                 </div>
               </div>
             </div>
@@ -847,7 +1387,7 @@ export default function Home() {
                       </div>
                       <div>
                         <div className="font-semibold text-gray-900">Alex (Me)</div>
-                        <div className="text-gray-600 text-sm">Drinking Coffee in Portland</div>
+                        <div className="text-gray-600 text-sm">Drinking Coffee in Bali</div>
                       </div>
                     </div>
                     <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-300 hover:scale-105 transform">
@@ -1153,8 +1693,12 @@ export default function Home() {
               <p className="text-gray-600 mb-6">
                 A regular coffee to keep me going through the next article or code review.
               </p>
-              <button className="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300">
-                Buy One Coffee
+              <button 
+                onClick={() => handleSupport(5, 'single-coffee')}
+                disabled={isProcessing}
+                className="w-full bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300"
+              >
+                {isProcessing ? 'Processing...' : 'Buy One Coffee'}
               </button>
             </div>
 
@@ -1168,8 +1712,12 @@ export default function Home() {
               <p className="text-gray-600 mb-6">
                 Enough coffee for a solid coding session. Perfect for when my content saves you hours of work!
               </p>
-              <button className="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300">
-                Boost My Energy
+              <button 
+                onClick={() => handleSupport(15, 'coffee-boost')}
+                disabled={isProcessing}
+                className="w-full bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300"
+              >
+                {isProcessing ? 'Processing...' : 'Boost My Energy'}
               </button>
             </div>
 
@@ -1180,8 +1728,12 @@ export default function Home() {
               <p className="text-gray-600 mb-6">
                 Coffee plus a snack for those marathon debugging sessions. You're basically funding my productivity!
               </p>
-              <button className="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300">
-                Fuel the Mission
+              <button 
+                onClick={() => handleSupport(25, 'coffee-snack')}
+                disabled={isProcessing}
+                className="w-full bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300"
+              >
+                {isProcessing ? 'Processing...' : 'Fuel the Mission'}
               </button>
             </div>
           </div>
@@ -1194,12 +1746,18 @@ export default function Home() {
                 type="number"
                 placeholder="10"
                 min="1"
+                value={customAmount}
+                onChange={(e) => setCustomAmount(e.target.value)}
                 className="flex-1 text-gray-900 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent text-center text-xl"
               />
               <span className="text-2xl">☕</span>
             </div>
-            <button className="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300">
-              Custom Support
+            <button 
+              onClick={handleCustomSupport}
+              disabled={isProcessing}
+              className="w-full bg-gray-900 hover:bg-gray-800 disabled:bg-gray-400 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300"
+            >
+              {isProcessing ? 'Processing...' : 'Custom Support'}
             </button>
           </div>
 
@@ -1208,19 +1766,19 @@ export default function Home() {
             <h3 className="text-2xl font-semibold mb-6">Coffee-Powered Stats</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-light mb-2">342</div>
+                <div className="text-3xl font-light mb-2">{supportStats.totalCoffees}</div>
                 <div className="text-amber-100 text-sm">Coffees Consumed</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-light mb-2">47</div>
+                <div className="text-3xl font-light mb-2">{supportStats.allNighters}</div>
                 <div className="text-amber-100 text-sm">All-Nighters</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-light mb-2">1,284</div>
+                <div className="text-3xl font-light mb-2">{supportStats.bugsFixed.toLocaleString()}</div>
                 <div className="text-amber-100 text-sm">Bugs Fixed</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-light mb-2">23</div>
+                <div className="text-3xl font-light mb-2">{supportStats.coffeeShops}</div>
                 <div className="text-amber-100 text-sm">Coffee Shops Visited</div>
               </div>
             </div>
@@ -1231,26 +1789,51 @@ export default function Home() {
             <h3 className="text-xl font-semibold text-gray-900 mb-6">Recent Coffee Supporters</h3>
             <div className="flex justify-center items-center gap-4 mb-6">
               <div className="flex -space-x-2">
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
-                  MK
-                </div>
-                <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
-                  SL
-                </div>
-                <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
-                  JD
-                </div>
-                <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
-                  AR
-                </div>
-                <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
-                  LC
-                </div>
+                {recentSupporters.length > 0 ? (
+                  recentSupporters.slice(0, 5).map((supporter, index) => (
+                    <div 
+                      key={index}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white ${
+                        ['bg-blue-500', 'bg-green-500', 'bg-purple-500', 'bg-orange-500', 'bg-pink-500'][index % 5]
+                      }`}
+                      title={supporter.name || 'Anonymous'}
+                    >
+                      {supporter.initials || 'AN'}
+                    </div>
+                  ))
+                ) : (
+                  // Fallback static supporters
+                  <>
+                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
+                      MK
+                    </div>
+                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
+                      SL
+                    </div>
+                    <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
+                      JD
+                    </div>
+                    <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
+                      AR
+                    </div>
+                    <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
+                      LC
+                    </div>
+                  </>
+                )}
               </div>
-              <span className="text-gray-600 text-sm">+12 others this month</span>
+              <span className="text-gray-600 text-sm">
+                {recentSupporters.length > 5 
+                  ? `+${recentSupporters.length - 5} others this month`
+                  : '+12 others this month'
+                }
+              </span>
             </div>
             <p className="text-gray-600 italic">
-              "Thanks for the tutorial on React hooks! Saved me 3 hours of debugging 🙏" - Sarah L.
+              {recentSupporters.length > 0 && recentSupporters[0].testimonial
+                ? `"${recentSupporters[0].testimonial}" - ${recentSupporters[0].name || 'Anonymous'}`
+                : '"Thanks for the tutorial on React hooks! Saved me 3 hours of debugging 🙏" - Sarah L.'
+              }
             </p>
           </div>
 
@@ -1278,8 +1861,185 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Payment Method Modal */}
+      {showPaymentModal && selectedSupport && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full">
+            <div className="text-center mb-6">
+              <div className="text-4xl mb-4">💳</div>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                Pilih Metode Pembayaran
+              </h3>
+              <p className="text-gray-600">
+                {selectedSupport.type} - ${selectedSupport.amount}
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {/* Trakteer.id - Indonesia */}
+              <button
+                onClick={() => redirectToPayment('trakteer')}
+                className="w-full bg-gradient-to-r from-blue-500 to-green-500 hover:from-blue-600 hover:to-green-600 text-white p-4 rounded-xl transition-all duration-300 flex items-center justify-between"
+              >
+                <div className="text-left">
+                  <div className="font-semibold">🇮🇩 Trakteer.id</div>
+                  <div className="text-sm opacity-90">QRIS, Bank Transfer, E-Wallet Indonesia</div>
+                </div>
+                <div className="text-2xl">→</div>
+              </button>
+
+              {/* Ko-fi - International */}
+              <button
+                onClick={() => redirectToPayment('kofi')}
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white p-4 rounded-xl transition-all duration-300 flex items-center justify-between"
+              >
+                <div className="text-left">
+                  <div className="font-semibold">🌍 Ko-fi</div>
+                  <div className="text-sm opacity-90">PayPal, Credit Card International</div>
+                </div>
+                <div className="text-2xl">→</div>
+              </button>
+
+              {/* Buy Me A Coffee - International */}
+              <button
+                onClick={() => redirectToPayment('bmac')}
+                className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white p-4 rounded-xl transition-all duration-300 flex items-center justify-between"
+              >
+                <div className="text-left">
+                  <div className="font-semibold">☕ Buy Me A Coffee</div>
+                  <div className="text-sm opacity-90">Credit Card, Stripe</div>
+                </div>
+                <div className="text-2xl">→</div>
+              </button>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => {
+                setShowPaymentModal(false);
+                setSelectedSupport(null);
+              }}
+              className="w-full mt-6 bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 rounded-xl transition-colors duration-300"
+            >
+              Batal
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Quick Navigation Section */}
+      <section className="py-16 bg-gray-900">
+        <div className="max-w-7xl mx-auto px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
+              Quick Navigation
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Find what you're looking for quickly with these direct links
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Workspace Link */}
+            <div className="group bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Workspaces</h3>
+              <p className="text-gray-400 text-sm mb-4">Explore amazing workspace setups and get inspired</p>
+              <a 
+                href="/workspace"
+                className="inline-flex items-center text-blue-400 hover:text-blue-300 font-medium transition-colors duration-300 group-hover:scale-105 transform"
+              >
+                Browse Workspaces →
+              </a>
+            </div>
+
+            {/* Portfolio Link */}
+            <div className="group bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Portfolio</h3>
+              <p className="text-gray-400 text-sm mb-4">View my latest projects and creative work</p>
+              <a 
+                href="#portfolio"
+                className="inline-flex items-center text-green-400 hover:text-green-300 font-medium transition-colors duration-300 group-hover:scale-105 transform"
+              >
+                View Portfolio →
+              </a>
+            </div>
+
+            {/* Blog Link */}
+            <div className="group bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Blog</h3>
+              <p className="text-gray-400 text-sm mb-4">Read my thoughts on tech, business, and life</p>
+              <a 
+                href="#blog"
+                className="inline-flex items-center text-purple-400 hover:text-purple-300 font-medium transition-colors duration-300 group-hover:scale-105 transform"
+              >
+                Read Articles →
+              </a>
+            </div>
+
+            {/* Contact Link */}
+            <div className="group bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all duration-300 hover:-translate-y-2">
+              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Contact</h3>
+              <p className="text-gray-400 text-sm mb-4">Get in touch for collaboration or questions</p>
+              <a 
+                href="#contact"
+                className="inline-flex items-center text-orange-400 hover:text-orange-300 font-medium transition-colors duration-300 group-hover:scale-105 transform"
+              >
+                Contact Me →
+              </a>
+            </div>
+          </div>
+
+          {/* Main CTA */}
+          <div className="text-center mt-12">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 md:p-12 inline-block">
+              <h3 className="text-2xl md:text-3xl font-light text-white mb-4">
+                Ready to Get Started?
+              </h3>
+              <p className="text-blue-100 text-lg mb-6 max-w-xl">
+                Whether you want to explore workspaces, discuss a project, or just say hello, 
+                I'm here to help you succeed.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <a 
+                  href="/workspace"
+                  className="bg-white text-blue-600 px-8 py-4 rounded-xl font-medium transition-all duration-300 hover:scale-105 transform hover:bg-gray-50"
+                >
+                  Explore Workspaces →
+                </a>
+                <a 
+                  href="#contact"
+                  className="border border-white/30 hover:border-white/50 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300"
+                >
+                  Let's Talk
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-white" id="contact">
         <div className="max-w-7xl mx-auto px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">
@@ -1296,7 +2056,7 @@ export default function Home() {
               <div>
                 <h3 className="text-2xl font-semibold text-gray-900 mb-6">Coffee & Conversation</h3>
                 <p className="text-gray-600 leading-relaxed mb-8">
-                  I'm based in Portland, but work with people everywhere. Prefer a quick call? Love a long email? Want to meet for actual coffee? I'm flexible.
+                  I'm based in Denpasar, Bali, but work with people everywhere. Prefer a quick call? Love a long email? Want to meet for actual coffee? I'm flexible.
                 </p>
               </div>
 
@@ -1311,7 +2071,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1">Text Me</h4>
-                    <p className="text-gray-600">+1 (503) 555-ALEX</p>
+                    <p className="text-gray-600">+62895323496371</p>
                     <p className="text-sm text-gray-500">Fastest way to reach me</p>
                   </div>
                 </div>
@@ -1325,7 +2085,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1">Email Me</h4>
-                    <p className="text-gray-600">hello@alexbuilds.dev</p>
+                    <p className="text-gray-600">budazimbud@gmail.com</p>
                     <p className="text-sm text-gray-500">I usually reply within 2 hours</p>
                   </div>
                 </div>
@@ -1340,7 +2100,7 @@ export default function Home() {
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-1">Meet Me</h4>
-                    <p className="text-gray-600">Portland, Oregon<br/>Or anywhere with good WiFi</p>
+                    <p className="text-gray-600">Denpasar, Bali<br/>Or anywhere with good WiFi</p>
                   </div>
                 </div>
 
@@ -1439,7 +2199,7 @@ export default function Home() {
                     id="phone"
                     name="phone"
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors placeholder-gray-600"
-                    placeholder="+1 (555) 123-4567"
+                    placeholder="+62895323496371"
                   />
                 </div>
 

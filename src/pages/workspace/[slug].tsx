@@ -2,6 +2,7 @@ import Footer from "@/components/Footer";
 import CommentSection from "@/components/CommentSection";
 import Image from "next/image";
 import { useState } from "react";
+import Navigation from "@/components/Navigation";
 
 // Hotspot Component for better organization
 function HotspotComponent({
@@ -277,6 +278,7 @@ export default function Store() {
 
   return (
     <>
+      <Navigation />
       {/* Custom styles untuk animasi signal */}
       <style jsx global>{`
         @keyframes radar-ping {
@@ -642,7 +644,7 @@ export default function Store() {
                         name: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-600"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                     placeholder="Enter item name"
                   />
                 </div>
@@ -659,7 +661,7 @@ export default function Store() {
                         description: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-600"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                     rows={4}
                     placeholder="Enter item description"
                   />
@@ -678,7 +680,7 @@ export default function Store() {
                         link: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-600"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                     placeholder="https://example.com"
                   />
                 </div>
@@ -752,7 +754,7 @@ export default function Store() {
                         name: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-600"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   />
                 </div>
 
@@ -768,7 +770,7 @@ export default function Store() {
                         description: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-600"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                     rows={4}
                   />
                 </div>
@@ -786,7 +788,7 @@ export default function Store() {
                         link: e.target.value,
                       })
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-600"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                     placeholder="https://example.com"
                   />
                 </div>
