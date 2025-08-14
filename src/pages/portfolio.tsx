@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
+import ExperienceSection from "@/components/Experience";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -366,6 +367,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <ExperienceSection />
 
       <Footer />
     </div>

@@ -68,7 +68,7 @@ export default function Navigation() {
                 Portfolio
               </Link>
               <Link 
-                href="#contact" 
+                href="/#contact" 
                 className={`transition-all duration-300 hover:scale-105 font-medium ${
                   isScrolled ? 'text-gray-700 hover:text-blue-600' : 'text-white drop-shadow-md hover:text-blue-200'
                 }`}
