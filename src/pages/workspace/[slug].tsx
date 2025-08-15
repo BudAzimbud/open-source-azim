@@ -55,6 +55,8 @@ function HotspotComponent({
     setIsDragging(false);
   };
 
+  console.log("Rendering hotspot:", object.name, "at position", object.position);
+  
   return (
     <div
       className={`absolute transform -translate-x-1/2 -translate-y-1/2 group ${
@@ -63,10 +65,12 @@ function HotspotComponent({
       style={{
         left: `${object.position.x}%`,
         top: `${object.position.y}%`,
+        zIndex: 50, // Menambahkan z-index agar hotspot selalu di atas
       }}
       onClick={(e) => {
         e.stopPropagation();
         onSelect(object.id);
+        console.log("Hotspot clicked:", object.id);
       }}
       onMouseEnter={() => onHover(object.id)}
       onMouseLeave={(e) => {
@@ -80,10 +84,10 @@ function HotspotComponent({
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
-      {/* Dot dengan glow effect */}
+      {/* Dot dengan glow effect - ukuran lebih besar dan glow lebih terang */}
       <div
         className={`
-        w-4 h-4 rounded-full border-2 border-white transition-all duration-300 relative z-10 glow-pulse
+        w-6 h-6 rounded-full border-2 border-white transition-all duration-300 relative z-10 glow-pulse
         ${
           isSelected
             ? "bg-blue-600 scale-150 shadow-lg"
@@ -93,11 +97,17 @@ function HotspotComponent({
         }
         ${isEditMode ? "ring-2 ring-yellow-400 ring-opacity-50" : ""}
       `}
+      style={{
+        boxShadow: "0 0 10px 2px rgba(59, 130, 246, 0.7)"
+      }}
       >
         {/* Inner core glow */}
-        <div className="absolute inset-0 rounded-full bg-white opacity-60 animate-pulse"
+        <div className="absolute inset-0 rounded-full bg-white opacity-70 animate-pulse"
              style={{ animationDuration: '1.5s' }}></div>
       </div>
+      
+      {/* Pulsing outer ring for better visibility */}
+      <div className="absolute -inset-2 rounded-full border-2 border-blue-400 opacity-50 animate-ping"></div>
 
       {/* Multi-layer signal animation */}
       <div className="absolute inset-0 pointer-events-none">
@@ -179,10 +189,203 @@ interface SetupObject {
   link?: string; // Optional link field
 }
 
-// Define the objects in your computer setup (Start with empty array)
-const setupObjects: SetupObject[] = [
-  // Empty - you can add your own hotspots using the editor
-];
+// Define default objects for each workspace setup
+const defaultSetupObjects: Record<string, SetupObject[]> = {
+  // Azim's Gaming Setup
+  "azim-setup": [
+    {
+      id: 1,
+      name: "Gaming Monitor",
+      position: { x: 35, y: 40 },
+      description: "27-inch 144Hz gaming monitor with HDR support and 1ms response time.",
+      link: "https://example.com/gaming-monitor"
+    },
+    {
+      id: 2,
+      name: "RGB Mechanical Keyboard",
+      position: { x: 50, y: 70 },
+      description: "Custom mechanical keyboard with RGB lighting and tactile switches.",
+      link: "https://example.com/mechanical-keyboard"
+    },
+    {
+      id: 3,
+      name: "Gaming Mouse",
+      position: { x: 65, y: 70 },
+      description: "High-precision gaming mouse with adjustable DPI and programmable buttons.",
+      link: "https://example.com/gaming-mouse"
+    },
+    {
+      id: 4,
+      name: "RGB Light Strip",
+      position: { x: 85, y: 30 },
+      description: "Customizable RGB light strip for ambient lighting behind the monitor.",
+      link: "https://example.com/rgb-strip"
+    }
+  ],
+  
+  // Minimal Productivity Station
+  "minimal-setup": [
+    {
+      id: 1,
+      name: "Ultrawide Monitor",
+      position: { x: 50, y: 40 },
+      description: "34-inch ultrawide monitor with USB-C connectivity for minimalist productivity.",
+      link: "https://example.com/ultrawide-monitor"
+    },
+    {
+      id: 2,
+      name: "Wireless Keyboard",
+      position: { x: 45, y: 65 },
+      description: "Low-profile wireless keyboard with aluminum frame and long battery life.",
+      link: "https://example.com/wireless-keyboard"
+    },
+    {
+      id: 3,
+      name: "Desk Plant",
+      position: { x: 75, y: 55 },
+      description: "Small succulent plant for a touch of nature in your workspace.",
+      link: "https://example.com/desk-plant"
+    },
+    {
+      id: 4,
+      name: "Desk Lamp",
+      position: { x: 20, y: 45 },
+      description: "Minimalist desk lamp with adjustable brightness and color temperature.",
+      link: "https://example.com/desk-lamp"
+    }
+  ],
+  
+  // Professional Streaming Studio
+  "streaming-setup": [
+    {
+      id: 1,
+      name: "Professional Microphone",
+      position: { x: 35, y: 50 },
+      description: "Studio-quality condenser microphone with shock mount and pop filter.",
+      link: "https://example.com/pro-mic"
+    },
+    {
+      id: 2,
+      name: "Key Light",
+      position: { x: 20, y: 30 },
+      description: "Professional LED key light with adjustable brightness and temperature.",
+      link: "https://example.com/key-light"
+    },
+    {
+      id: 3,
+      name: "Stream Deck",
+      position: { x: 50, y: 70 },
+      description: "Customizable control pad for managing stream settings and transitions.",
+      link: "https://example.com/stream-deck"
+    },
+    {
+      id: 4,
+      name: "DSLR Camera",
+      position: { x: 75, y: 40 },
+      description: "High-quality DSLR camera used as a webcam for professional streaming.",
+      link: "https://example.com/dslr-camera"
+    }
+  ],
+  
+  // Developer's Coding Cave
+  "coding-setup": [
+    {
+      id: 1,
+      name: "Triple Monitor Setup",
+      position: { x: 50, y: 40 },
+      description: "Triple monitor setup for maximum productivity and multitasking.",
+      link: "https://example.com/triple-monitor"
+    },
+    {
+      id: 2,
+      name: "Ergonomic Chair",
+      position: { x: 50, y: 75 },
+      description: "Fully adjustable ergonomic chair for long coding sessions.",
+      link: "https://example.com/ergonomic-chair"
+    },
+    {
+      id: 3,
+      name: "Split Mechanical Keyboard",
+      position: { x: 40, y: 65 },
+      description: "Ergonomic split mechanical keyboard with custom keycaps.",
+      link: "https://example.com/split-keyboard"
+    },
+    {
+      id: 4,
+      name: "Vertical Mouse",
+      position: { x: 60, y: 65 },
+      description: "Ergonomic vertical mouse to reduce wrist strain during long coding sessions.",
+      link: "https://example.com/vertical-mouse"
+    }
+  ],
+  
+  // Creative Design Workspace
+  "creative-setup": [
+    {
+      id: 1,
+      name: "Drawing Tablet",
+      position: { x: 55, y: 50 },
+      description: "Professional drawing tablet with pressure sensitivity for digital art.",
+      link: "https://example.com/drawing-tablet"
+    },
+    {
+      id: 2,
+      name: "Color-Accurate Monitor",
+      position: { x: 45, y: 35 },
+      description: "4K color-calibrated monitor for precise design work.",
+      link: "https://example.com/color-accurate-monitor"
+    },
+    {
+      id: 3,
+      name: "3D Mouse",
+      position: { x: 65, y: 60 },
+      description: "Specialized 3D mouse for navigating in 3D modeling software.",
+      link: "https://example.com/3d-mouse"
+    },
+    {
+      id: 4,
+      name: "Adjustable Desk Lamp",
+      position: { x: 25, y: 40 },
+      description: "Color temperature adjustable desk lamp for accurate color work.",
+      link: "https://example.com/adjustable-lamp"
+    }
+  ],
+  
+  // Mobile Content Creation
+  "mobile-setup": [
+    {
+      id: 1,
+      name: "Ring Light",
+      position: { x: 50, y: 30 },
+      description: "Portable ring light with adjustable brightness and color temperature.",
+      link: "https://example.com/ring-light"
+    },
+    {
+      id: 2,
+      name: "Smartphone Gimbal",
+      position: { x: 60, y: 55 },
+      description: "3-axis gimbal stabilizer for smooth mobile video recording.",
+      link: "https://example.com/smartphone-gimbal"
+    },
+    {
+      id: 3,
+      name: "Wireless Microphone",
+      position: { x: 40, y: 55 },
+      description: "Compact wireless lavalier microphone for clear audio recording.",
+      link: "https://example.com/wireless-mic"
+    },
+    {
+      id: 4,
+      name: "Portable Power Bank",
+      position: { x: 30, y: 70 },
+      description: "High-capacity power bank for extended recording sessions.",
+      link: "https://example.com/power-bank"
+    }
+  ]
+};
+
+// Empty setup objects as fallback
+const setupObjects: SetupObject[] = [];
 
 export default function Store() {
   const router = useRouter();
@@ -192,18 +395,47 @@ export default function Store() {
   const [hoveredObject, setHoveredObject] = useState<number | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editableObjects, setEditableObjects] = useState<SetupObject[]>(setupObjects);
+  // Function to reset to default objects for a workspace
+  const resetToDefaultObjects = (workspaceId: string) => {
+    if (workspaceId && defaultSetupObjects[workspaceId]) {
+      console.log("Resetting to default objects for workspace:", workspaceId);
+      setEditableObjects(defaultSetupObjects[workspaceId]);
+      // Also clear localStorage to avoid loading corrupted data
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(`editableObjects-${workspaceId}`);
+      }
+      return true;
+    }
+    return false;
+  };
+
   // Load editableObjects from localStorage after slug is available
   useEffect(() => {
     if (typeof window !== "undefined" && slug) {
+      console.log("Current slug changed to:", slug);
+      console.log("Available default objects:", Object.keys(defaultSetupObjects));
+      
       const saved = localStorage.getItem(`editableObjects-${slug}`);
       if (saved) {
         try {
-          setEditableObjects(JSON.parse(saved));
-        } catch {
-          setEditableObjects(setupObjects);
+          const parsedObjects = JSON.parse(saved);
+          console.log("Loaded objects from localStorage:", parsedObjects);
+          
+          if (Array.isArray(parsedObjects) && parsedObjects.length > 0) {
+            setEditableObjects(parsedObjects);
+          } else {
+            console.log("Loaded array is empty, using defaults");
+            resetToDefaultObjects(slug);
+          }
+        } catch (error) {
+          console.error("Error parsing saved objects:", error);
+          // If no saved data or parsing fails, use default objects for this workspace if available
+          resetToDefaultObjects(slug);
         }
       } else {
-        setEditableObjects(setupObjects);
+        // If no saved data, use default objects for this workspace if available
+        console.log("No saved data found, using defaults");
+        resetToDefaultObjects(slug);
       }
     }
     // eslint-disable-next-line
@@ -213,6 +445,10 @@ export default function Store() {
   useEffect(() => {
     if (typeof window !== "undefined" && slug) {
       localStorage.setItem(`editableObjects-${slug}`, JSON.stringify(editableObjects));
+      // Debug log
+      console.log("Current slug:", slug);
+      console.log("Current editableObjects:", editableObjects);
+      console.log("Default objects for this slug:", defaultSetupObjects[slug]);
     }
   }, [editableObjects, slug]);
   const [isAddingNew, setIsAddingNew] = useState(false);
@@ -547,6 +783,21 @@ export default function Store() {
               >
                 Reset
               </button>
+              
+              {slug && (
+                <button
+                  onClick={() => {
+                    if (resetToDefaultObjects(slug)) {
+                      alert("Hotspots reset to default configuration");
+                    } else {
+                      alert("No default configuration available for this workspace");
+                    }
+                  }}
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm"
+                >
+                  Reset to Default
+                </button>
+              )}
             </div>
           </div>
         </div>
