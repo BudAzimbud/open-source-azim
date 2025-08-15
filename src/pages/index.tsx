@@ -2125,7 +2125,36 @@ export default function Home() {
 
             {/* Contact Form */}
             <div className="bg-white rounded-3xl shadow-xl p-8 lg:p-12">
-              <form className="space-y-6">
+              <form
+                className="space-y-6"
+                onSubmit={e => {
+                  e.preventDefault();
+                  const form = e.target as HTMLFormElement;
+                  const firstName = (form.firstName as HTMLInputElement)?.value || "";
+                  const lastName = (form.lastName as HTMLInputElement)?.value || "";
+                  const email = (form.email as HTMLInputElement)?.value || "";
+                  const phone = (form.phone as HTMLInputElement)?.value || "";
+                  const service = (form.service as HTMLSelectElement)?.value || "";
+                  const budget = (form.budget as HTMLSelectElement)?.value || "";
+                  const message = (form.message as HTMLTextAreaElement)?.value || "";
+                  const agree = (form.agree as HTMLInputElement)?.checked;
+                  if (!agree) {
+                    alert("Please agree to the Terms of Service and Privacy Policy.");
+                    return;
+                  }
+                  // Compose WhatsApp message
+                  const text =
+                    `*Contact Form Submission*\n` +
+                    `*Name:* ${firstName} ${lastName}\n` +
+                    `*Email:* ${email}\n` +
+                    `*Phone:* ${phone}\n` +
+                    `*Service:* ${service}\n` +
+                    `*Budget:* ${budget}\n` +
+                    `*Details:* ${message}`;
+                  const whatsappUrl = `https://wa.me/62895323496371?text=${encodeURIComponent(text)}`;
+                  window.open(whatsappUrl, "_blank");
+                }}
+              >
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -2135,7 +2164,7 @@ export default function Home() {
                       type="text"
                       id="firstName"
                       name="firstName"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors placeholder-gray-600"
+                      className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors placeholder-gray-600"
                       placeholder="John"
                     />
                   </div>
@@ -2147,7 +2176,7 @@ export default function Home() {
                       type="text"
                       id="lastName"
                       name="lastName"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors placeholder-gray-600"
+                      className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors placeholder-gray-600"
                       placeholder="Doe"
                     />
                   </div>
@@ -2161,7 +2190,7 @@ export default function Home() {
                     type="email"
                     id="email"
                     name="email"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors placeholder-gray-600"
+                    className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors placeholder-gray-600"
                     placeholder="john@example.com"
                   />
                 </div>
@@ -2174,7 +2203,7 @@ export default function Home() {
                     type="tel"
                     id="phone"
                     name="phone"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors placeholder-gray-600"
+                    className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors placeholder-gray-600"
                     placeholder="+62895323496371"
                   />
                 </div>
@@ -2186,7 +2215,7 @@ export default function Home() {
                   <select
                     id="service"
                     name="service"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900"
+                    className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors text-gray-900"
                   >
                     <option value="">Select a service</option>
                     <option value="virtual-assistant">Virtual Assistant</option>
@@ -2204,7 +2233,7 @@ export default function Home() {
                   <select
                     id="budget"
                     name="budget"
-                    className="w-full px-4 py-3 border text-gray-900 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                    className="w-full text-black px-4 py-3 border text-gray-900 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
                   >
                     <option value="">Select budget range</option>
                     <option value="under-5k">Under $5,000</option>
@@ -2223,7 +2252,7 @@ export default function Home() {
                     id="message"
                     name="message"
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none placeholder-gray-600"
+                    className="w-full text-black px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-none placeholder-gray-600"
                     placeholder="Tell us about your project, timeline, and any specific requirements..."
                   ></textarea>
                 </div>
