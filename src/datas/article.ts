@@ -1,166 +1,382 @@
-// Coffee Boost API Integration
-// Using Quotable API for motivational quotes
-
-export interface CoffeeBoost {
-  id: string;
-  content: string;
-  author: string;
-  tags: string[];
-  authorSlug: string;
-  length: number;
-}
-
-export interface ZenQuote {
-  q: string; // quote
-  a: string; // author
-  h: string; // html content
-}
-
-// Quotable API - Free motivational quotes
-export const getMotivationalQuote = async (): Promise<CoffeeBoost> => {
-  try {
-    const response = await fetch('https://api.quotable.io/random?tags=motivational,success,inspirational&minLength=50');
-    if (!response.ok) {
-      throw new Error('Failed to fetch quote');
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching motivational quote:', error);
-    // Fallback quote
-    return {
-      id: 'fallback',
-      content: 'The only way to do great work is to love what you do.',
-      author: 'Steve Jobs',
-      tags: ['motivational', 'success'],
-      authorSlug: 'steve-jobs',
-      length: 52
-    };
-  }
-};
-
-// ZenQuotes API - Alternative free API
-export const getZenQuote = async (): Promise<ZenQuote> => {
-  try {
-    const response = await fetch('https://zenquotes.io/api/random');
-    if (!response.ok) {
-      throw new Error('Failed to fetch zen quote');
-    }
-    const data = await response.json();
-    return data[0]; // API returns array with one quote
-  } catch (error) {
-    console.error('Error fetching zen quote:', error);
-    return {
-      q: 'Success is not final, failure is not fatal: it is the courage to continue that counts.',
-      a: 'Winston Churchill',
-      h: 'Success is not final, failure is not fatal: it is the courage to continue that counts.'
-    };
-  }
-};
-
-// Programming-specific quotes for developers
-export const getProgrammingQuote = async (): Promise<any> => {
-  try {
-    const response = await fetch('https://programming-quotes-api.herokuapp.com/quotes/random');
-    if (!response.ok) {
-      throw new Error('Failed to fetch programming quote');
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error fetching programming quote:', error);
-    return {
-      quote: 'Code is like humor. When you have to explain it, it\'s bad.',
-      author: 'Cory House'
-    };
-  }
-};
-
-// Daily motivation with different types
-export const getDailyCoffeeBoost = async (type: 'motivational' | 'programming' | 'zen' = 'motivational') => {
-  switch (type) {
-    case 'motivational':
-      return await getMotivationalQuote();
-    case 'programming':
-      return await getProgrammingQuote();
-    case 'zen':
-      return await getZenQuote();
-    default:
-      return await getMotivationalQuote();
-  }
-};
-
-// Coffee-themed quotes (static backup)
-export const coffeeQuotes = [
-  {
-    id: 'coffee-1',
-    content: 'Coffee: because adulting is hard.',
-    author: 'Anonymous',
-    tags: ['coffee', 'humor'],
-    type: 'coffee'
-  },
-  {
-    id: 'coffee-2', 
-    content: 'Life happens, coffee helps.',
-    author: 'Anonymous',
-    tags: ['coffee', 'life'],
-    type: 'coffee'
-  },
-  {
-    id: 'coffee-3',
-    content: 'But first, coffee.',
-    author: 'Anonymous',
-    tags: ['coffee', 'morning'],
-    type: 'coffee'
-  },
-  {
-    id: 'coffee-4',
-    content: 'Coffee is a language in itself.',
-    author: 'Jackie Chan',
-    tags: ['coffee', 'wisdom'],
-    type: 'coffee'
-  },
-  {
-    id: 'coffee-5',
-    content: 'I have measured out my life with coffee spoons.',
-    author: 'T.S. Eliot',
-    tags: ['coffee', 'poetry'],
-    type: 'coffee'
-  }
-];
-
-// Get random coffee quote
-export const getRandomCoffeeQuote = () => {
-  return coffeeQuotes[Math.floor(Math.random() * coffeeQuotes.length)];
-};
-
-// Combined coffee boost function
-export const getCoffeeBoost = async (includeAPI: boolean = true) => {
-  if (includeAPI) {
-    try {
-      // Try to get online quote first
-      const onlineQuote = await getMotivationalQuote();
-      return {
-        ...onlineQuote,
-        source: 'api',
-        timestamp: new Date().toISOString()
-      };
-    } catch (error) {
-      // Fallback to local coffee quotes
-      const localQuote = getRandomCoffeeQuote();
-      return {
-        ...localQuote,
-        source: 'local',
-        timestamp: new Date().toISOString()
-      };
-    }
-  } else {
-    // Use local quotes only
-    const localQuote = getRandomCoffeeQuote();
-    return {
-      ...localQuote,
-      source: 'local',
-      timestamp: new Date().toISOString()
-    };
-  }
+export default {
+  articles: [
+    {
+      id: 1,
+      slug: "guide-building-modern-react-applications",
+      title: "Complete Guide to Building Modern React Applications",
+      excerpt:
+        "Learn how to build scalable and maintainable React applications using the latest best practices and tools.",
+       "content": "# Complete Guide to Building Modern React Applications\n\nReact has evolved significantly since its introduction by Facebook in 2013, transforming from a simple view library into a comprehensive ecosystem that powers millions of applications worldwide. Today's React development embraces functional components, hooks, concurrent features, and a rich ecosystem of tools that make building scalable applications more efficient than ever.\n\n## Why React Remains the Top Choice in 2025\n\nReact's popularity stems from its component-based architecture, virtual DOM efficiency, and massive community support. With over 200k stars on GitHub and backing from Meta, React continues to innovate with features like Server Components, concurrent rendering, and improved developer tooling.\n\n## Setting Up Your Modern React Environment\n\n### Project Initialization\n```bash\n# Vite - Lightning fast development\nnpm create vite@latest my-app -- --template react-ts\n\n# Next.js - Full-stack framework\nnpx create-next-app@latest --typescript\n\n# Remix - Web standards focused\nnpx create-remix@latest\n```\n\n### Essential Dependencies\nModern React projects typically include:\n- **TypeScript** for type safety\n- **Tailwind CSS** for utility-first styling  \n- **React Query/TanStack Query** for server state\n- **Zustand/Redux Toolkit** for client state\n- **React Hook Form** for form handling\n- **Framer Motion** for animations\n\n## Core React Concepts\n\n### Functional Components and Hooks\nReact hooks revolutionized component logic by allowing functional components to manage state and side effects:\n\n```jsx\nimport { useState, useEffect } from 'react';\n\nfunction UserProfile({ userId }) {\n  const [user, setUser] = useState(null);\n  const [loading, setLoading] = useState(true);\n\n  useEffect(() => {\n    fetchUser(userId)\n      .then(setUser)\n      .finally(() => setLoading(false));\n  }, [userId]);\n\n  if (loading) return <div>Loading...</div>;\n  \n  return (\n    <div className=\"user-profile\">\n      <h2>{user.name}</h2>\n      <p>{user.email}</p>\n    </div>\n  );\n}\n```\n\n### State Management Strategies\n\n**Local State with useState:**\nPerfect for component-specific data that doesn't need sharing.\n\n**Context API:**\nIdeal for app-wide state like themes, authentication, or user preferences.\n\n**External State Libraries:**\n- **Zustand** - Lightweight and simple\n- **Redux Toolkit** - Predictable state container\n- **Jotai** - Atomic state management\n\n### Custom Hooks for Reusability\nExtract component logic into reusable custom hooks:\n\n```jsx\nfunction useApi(url) {\n  const [data, setData] = useState(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState(null);\n\n  useEffect(() => {\n    fetch(url)\n      .then(res => res.json())\n      .then(setData)\n      .catch(setError)\n      .finally(() => setLoading(false));\n  }, [url]);\n\n  return { data, loading, error };\n}\n```\n\n## Modern React Patterns\n\n### Component Composition\nFavor composition over inheritance for flexible, reusable components:\n\n```jsx\nfunction Card({ children, className = \"\" }) {\n  return (\n    <div className={`card ${className}`}>\n      {children}\n    </div>\n  );\n}\n\nfunction CardHeader({ children }) {\n  return <div className=\"card-header\">{children}</div>;\n}\n\nfunction CardContent({ children }) {\n  return <div className=\"card-content\">{children}</div>;\n}\n```\n\n### Render Props and Higher-Order Components\nWhile hooks have largely replaced these patterns, they're still valuable for certain use cases:\n\n```jsx\nfunction withLoading(WrappedComponent) {\n  return function WithLoadingComponent({ isLoading, ...props }) {\n    if (isLoading) {\n      return <div>Loading...</div>;\n    }\n    return <WrappedComponent {...props} />;\n  };\n}\n```\n\n## Performance Optimization\n\n### React.memo and useMemo\nPrevent unnecessary re-renders with memoization:\n\n```jsx\nconst ExpensiveComponent = React.memo(({ data, onUpdate }) => {\n  const processedData = useMemo(() => \n    data.map(item => expensiveOperation(item)), [data]\n  );\n\n  return (\n    <div>\n      {processedData.map(item => (\n        <div key={item.id}>{item.name}</div>\n      ))}\n    </div>\n  );\n});\n```\n\n### Code Splitting and Lazy Loading\nReduce initial bundle size with dynamic imports:\n\n```jsx\nconst LazyComponent = React.lazy(() => import('./LazyComponent'));\n\nfunction App() {\n  return (\n    <Suspense fallback={<div>Loading...</div>}>\n      <LazyComponent />\n    </Suspense>\n  );\n}\n```\n\n## Testing Modern React Applications\n\n### Testing Philosophy\nFocus on testing behavior, not implementation:\n\n```jsx\nimport { render, screen, fireEvent } from '@testing-library/react';\nimport userEvent from '@testing-library/user-event';\n\ntest('user can submit form with valid data', async () => {\n  render(<ContactForm />);\n  \n  await userEvent.type(screen.getByLabelText(/name/i), 'John Doe');\n  await userEvent.type(screen.getByLabelText(/email/i), 'john@example.com');\n  await userEvent.click(screen.getByRole('button', { name: /submit/i }));\n  \n  expect(screen.getByText(/thank you/i)).toBeInTheDocument();\n});\n```\n\n## Deployment and Production Optimization\n\n### Build Optimization\nModern React apps require careful attention to bundle size and loading performance:\n\n```javascript\n// vite.config.js\nexport default {\n  build: {\n    rollupOptions: {\n      output: {\n        manualChunks: {\n          vendor: ['react', 'react-dom'],\n          ui: ['@mui/material', 'framer-motion']\n        }\n      }\n    }\n  }\n}\n```\n\n### Environment-Specific Configurations\nUse environment variables for different deployment targets:\n\n```jsx\nconst API_URL = process.env.NODE_ENV === 'production' \n  ? 'https://api.myapp.com' \n  : 'http://localhost:3001';\n```\n\n## React Ecosystem in 2025\n\n### Meta-Frameworks\n- **Next.js** - The most popular React framework with SSR, SSG, and API routes\n- **Remix** - Web standards-focused with excellent loading states\n- **Gatsby** - Static site generation with GraphQL data layer\n\n### Styling Solutions\n- **Tailwind CSS** - Utility-first framework\n- **Styled Components** - CSS-in-JS with component styling\n- **CSS Modules** - Scoped CSS with build-time processing\n\n### State Management Evolution\nThe React ecosystem has moved toward more specialized state management:\n- **Server State**: React Query, SWR, Apollo Client\n- **Client State**: Zustand, Valtio, Jotai\n- **Form State**: React Hook Form, Formik\n- **URL State**: React Router, Next.js Router\n\n## Best Practices for 2025\n\n### Component Design\n1. Keep components small and focused\n2. Use TypeScript for better developer experience\n3. Implement proper error boundaries\n4. Follow consistent naming conventions\n5. Document complex components with JSDoc\n\n### Performance Guidelines\n1. Use React DevTools Profiler to identify bottlenecks\n2. Implement virtual scrolling for large lists\n3. Optimize images with next/image or similar solutions\n4. Use service workers for caching strategies\n5. Monitor Core Web Vitals in production\n\n### Security Considerations\n1. Sanitize user input to prevent XSS attacks\n2. Use HTTPS in production\n3. Implement proper authentication flows\n4. Validate data on both client and server\n5. Keep dependencies updated\n\n## Conclusion\n\nModern React development is more powerful and accessible than ever. By embracing functional components, hooks, TypeScript, and the rich ecosystem of tools available, developers can build maintainable, performant applications that scale with business needs.\n\nThe key to success with React is understanding its core principles—component composition, unidirectional data flow, and declarative programming—while staying current with ecosystem developments and best practices.\n\nWhether you're building a simple portfolio site or a complex enterprise application, React provides the foundation and flexibility needed to create exceptional user experiences in 2025 and beyond.",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Passionate developer and tech enthusiast. I love sharing knowledge about modern web development, productivity tools, and everything in between.",
+      },
+      publishedAt: "2024-01-15",
+      updatedAt: "2024-01-20",
+      readTime: "8 min",
+      category: "Development",
+      categoryColor: "green",
+      tags: ["React", "JavaScript", "Frontend"],
+      image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&h=400&fit=crop",
+      stats: {
+        likes: 45,
+        views: 1200,
+        comments: 8,
+      },
+      related: [2, 3],
+    },
+    {
+      id: 2,
+      slug: "typescript-best-practices-large-applications",
+      title: "TypeScript Best Practices for Large Applications",
+      excerpt:
+        "Advanced TypeScript patterns and practices for building maintainable large-scale applications.",
+      content:
+        "# TypeScript Best Practices for Large Applications\n\nAs applications grow in size and complexity...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Passionate developer and tech enthusiast.",
+      },
+      publishedAt: "2024-02-20",
+      updatedAt: "2024-02-25",
+      readTime: "10 min",
+      category: "Development",
+      categoryColor: "green",
+      tags: ["TypeScript", "JavaScript", "Architecture"],
+      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&h=400&fit=crop",
+      stats: {
+        likes: 38,
+        views: 950,
+        comments: 12,
+      },
+      related: [1, 3],
+    },
+    {
+      id: 3,
+      slug: "productivity-setup-2024",
+      title: "My 2024 Productivity Setup: Tools and Workflows",
+      excerpt:
+        "A deep dive into the tools, apps, and workflows that help me stay productive.",
+      content:
+        "# My 2024 Productivity Setup\n\nProductive work requires the right combination of tools...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Tech enthusiast focused on productivity and development.",
+      },
+      publishedAt: "2024-03-10",
+      updatedAt: null,
+      readTime: "6 min",
+      category: "Productivity",
+      categoryColor: "orange",
+      tags: ["Productivity", "Tools", "Workflows"],
+      image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=400&fit=crop",
+      stats: {
+        likes: 62,
+        views: 1850,
+        comments: 15,
+      },
+      related: [1, 2],
+    },
+    // ARTIKEL TAMBAHAN
+    {
+      id: 4,
+      slug: "mastering-next-js-13-app-router",
+      title: "Mastering Next.js 13: The Complete Guide to App Router",
+      excerpt:
+        "Explore the new App Router in Next.js 13 and learn how to build modern, server-rendered React applications with improved performance.",
+      content:
+        "# Mastering Next.js 13: The Complete Guide to App Router\n\nNext.js 13 introduced a revolutionary new routing system called the App Router. This guide explores how to leverage its power for building modern web applications...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Passionate developer and tech enthusiast.",
+      },
+      publishedAt: "2024-04-05",
+      updatedAt: "2024-04-10",
+      readTime: "12 min",
+      category: "Development",
+      categoryColor: "green",
+      tags: ["Next.js", "React", "JavaScript", "SSR"],
+      image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=400&fit=crop",
+      stats: {
+        likes: 87,
+        views: 2300,
+        comments: 23,
+      },
+      related: [1, 6, 9],
+    },
+    {
+      id: 5,
+      slug: "ergonomic-workspace-setup-developers",
+      title: "The Ultimate Ergonomic Workspace Setup for Developers",
+      excerpt:
+        "Create a comfortable and healthy workspace that prevents injuries and boosts productivity with these ergonomic essentials.",
+      content:
+        "# The Ultimate Ergonomic Workspace Setup for Developers\n\nAs developers, we spend countless hours at our desks. This comprehensive guide will help you create an ergonomic workspace that prevents pain and enhances your productivity...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Tech enthusiast and ergonomics advocate.",
+      },
+      publishedAt: "2024-03-22",
+      updatedAt: null,
+      readTime: "9 min",
+      category: "Hardware",
+      categoryColor: "purple",
+      tags: ["Ergonomics", "Hardware", "Productivity", "Health"],
+      image: "https://images.unsplash.com/photo-1603969072881-b0fc7f3d6d7a?w=800&h=400&fit=crop",
+      stats: {
+        likes: 104,
+        views: 3150,
+        comments: 31,
+      },
+      related: [3, 8, 11],
+    },
+    {
+      id: 6,
+      slug: "state-management-react-2024",
+      title: "Modern State Management in React: Beyond Redux",
+      excerpt:
+        "Discover the latest state management libraries and patterns for React applications in 2024.",
+      content:
+        "# Modern State Management in React: Beyond Redux\n\nState management in React has evolved significantly beyond Redux. This article explores modern alternatives like Zustand, Jotai, and React Query that simplify state management while improving performance...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Passionate developer and tech enthusiast.",
+      },
+      publishedAt: "2024-02-28",
+      updatedAt: "2024-03-05",
+      readTime: "11 min",
+      category: "Development",
+      categoryColor: "green",
+      tags: ["React", "State Management", "JavaScript", "Frontend"],
+      image: "https://images.unsplash.com/photo-1565106430482-8f6e74349ca1?w=800&h=400&fit=crop",
+      stats: {
+        likes: 76,
+        views: 1890,
+        comments: 19,
+      },
+      related: [1, 2, 4],
+    },
+    {
+      id: 7,
+      slug: "advanced-css-grid-layouts",
+      title: "Advanced CSS Grid Layouts for Modern Web Applications",
+      excerpt:
+        "Master complex layouts with CSS Grid and learn techniques for building responsive, dynamic interfaces.",
+      content:
+        "# Advanced CSS Grid Layouts for Modern Web Applications\n\nCSS Grid has revolutionized web layout design. This deep dive explores advanced grid techniques for creating complex, responsive layouts with minimal code...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Frontend developer specializing in modern CSS and UI design.",
+      },
+      publishedAt: "2024-01-18",
+      updatedAt: null,
+      readTime: "14 min",
+      category: "Development",
+      categoryColor: "green",
+      tags: ["CSS", "Frontend", "Web Design", "Responsive"],
+      image: "https://images.unsplash.com/photo-1517292987719-0369a794ec0f?w=800&h=400&fit=crop",
+      stats: {
+        likes: 92,
+        views: 2750,
+        comments: 24,
+      },
+      related: [9, 10, 12],
+    },
+    {
+      id: 8,
+      slug: "mechanical-keyboards-developers-guide",
+      title: "The Developer's Guide to Mechanical Keyboards",
+      excerpt:
+        "Everything you need to know about mechanical keyboards: switches, layouts, customization options, and top recommendations for programmers.",
+      content:
+        "# The Developer's Guide to Mechanical Keyboards\n\nMechanical keyboards have become essential tools for many developers. This comprehensive guide covers everything from switch types to keycap materials, helping you find the perfect keyboard for your coding needs...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Tech enthusiast and mechanical keyboard collector.",
+      },
+      publishedAt: "2024-02-15",
+      updatedAt: "2024-02-18",
+      readTime: "15 min",
+      category: "Hardware",
+      categoryColor: "purple",
+      tags: ["Hardware", "Keyboards", "Ergonomics", "Productivity"],
+      image: "https://images.unsplash.com/photo-1595225476474-87563907a212?w=800&h=400&fit=crop",
+      stats: {
+        likes: 128,
+        views: 4250,
+        comments: 47,
+      },
+      related: [5, 11],
+    },
+    {
+      id: 9,
+      slug: "tailwind-css-at-scale",
+      title: "Using Tailwind CSS at Scale: Best Practices and Pitfalls",
+      excerpt:
+        "Learn how to effectively implement Tailwind CSS in large projects while maintaining code quality and performance.",
+      content:
+        "# Using Tailwind CSS at Scale: Best Practices and Pitfalls\n\nTailwind CSS has transformed frontend development, but using it in large-scale applications requires careful planning. This article shares strategies for organizing Tailwind projects, maintaining consistency, and avoiding common pitfalls...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Frontend developer specializing in modern CSS and UI design.",
+      },
+      publishedAt: "2024-03-05",
+      updatedAt: null,
+      readTime: "13 min",
+      category: "Development",
+      categoryColor: "green",
+      tags: ["Tailwind CSS", "CSS", "Frontend", "Web Design"],
+      image: "https://images.unsplash.com/photo-1618788372246-79faff717f49?w=800&h=400&fit=crop",
+      stats: {
+        likes: 83,
+        views: 2120,
+        comments: 29,
+      },
+      related: [7, 10, 4],
+    },
+    {
+      id: 10,
+      slug: "web-animation-performance",
+      title: "High-Performance Web Animations: Techniques for Smooth UI",
+      excerpt:
+        "Create butter-smooth animations that don't compromise performance with these advanced animation techniques.",
+      content:
+        "# High-Performance Web Animations: Techniques for Smooth UI\n\nWeb animations can significantly enhance user experience, but they often come with performance costs. This guide explores techniques for creating efficient animations that maintain 60fps even on mobile devices...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Frontend developer specializing in modern CSS and UI design.",
+      },
+      publishedAt: "2024-04-12",
+      updatedAt: null,
+      readTime: "11 min",
+      category: "Development",
+      categoryColor: "green",
+      tags: ["Animation", "Performance", "CSS", "JavaScript"],
+      image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=400&fit=crop",
+      stats: {
+        likes: 71,
+        views: 1950,
+        comments: 18,
+      },
+      related: [7, 9, 12],
+    },
+    {
+      id: 11,
+      slug: "monitor-setup-developers",
+      title: "The Ideal Monitor Setup for Developers in 2024",
+      excerpt:
+        "Find the perfect monitor configuration to boost your productivity and reduce eye strain during long coding sessions.",
+      content:
+        "# The Ideal Monitor Setup for Developers in 2024\n\nThe right monitor setup can dramatically improve your coding efficiency and comfort. This guide evaluates various monitor configurations—from ultrawide to vertical orientations—and recommends the best options based on different programming workflows...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Tech enthusiast and hardware reviewer.",
+      },
+      publishedAt: "2024-01-30",
+      updatedAt: "2024-02-05",
+      readTime: "10 min",
+      category: "Hardware",
+      categoryColor: "purple",
+      tags: ["Hardware", "Monitors", "Productivity", "Ergonomics"],
+      image: "https://images.unsplash.com/photo-1547119957-637f8679db1e?w=800&h=400&fit=crop",
+      stats: {
+        likes: 96,
+        views: 3100,
+        comments: 34,
+      },
+      related: [5, 8],
+    },
+    {
+      id: 12,
+      slug: "dark-mode-implementation-guide",
+      title: "The Complete Guide to Dark Mode Implementation",
+      excerpt:
+        "Learn how to add dark mode to your applications with CSS variables, prefers-color-scheme, and state management.",
+      content:
+        "# The Complete Guide to Dark Mode Implementation\n\nDark mode has become a standard feature for modern applications. This comprehensive guide covers everything from CSS strategies to accessibility considerations when implementing dark mode...",
+      author: {
+        id: 1,
+        name: "Azim",
+        avatar: "https://avatars.githubusercontent.com/u/89817666?v=4&size=64",
+        bio: "Frontend developer specializing in modern CSS and UI design.",
+      },
+      publishedAt: "2024-04-02",
+      updatedAt: null,
+      readTime: "9 min",
+      category: "Development",
+      categoryColor: "green",
+      tags: ["CSS", "JavaScript", "UI Design", "Accessibility"],
+      image: "https://images.unsplash.com/photo-1520509414578-d9cbf09933a1?w=800&h=400&fit=crop",
+      stats: {
+        likes: 88,
+        views: 2450,
+        comments: 26,
+      },
+      related: [7, 9, 10],
+    },
+  ],
+  categories: [
+    {
+      id: "development",
+      name: "Development",
+      color: "green",
+      description: "Articles about software development and programming",
+    },
+    {
+      id: "productivity",
+      name: "Productivity",
+      color: "orange",
+      description: "Tools, techniques and strategies to boost productivity",
+    },
+    {
+      id: "hardware",
+      name: "Hardware",
+      color: "purple",
+      description: "Reviews and guides about tech hardware",
+    },
+  ],
+  tags: [
+    { id: "react", name: "React" },
+    { id: "javascript", name: "JavaScript" },
+    { id: "typescript", name: "TypeScript" },
+    { id: "frontend", name: "Frontend" },
+    { id: "productivity", name: "Productivity" },
+    { id: "tools", name: "Tools" },
+    { id: "next-js", name: "Next.js" },
+    { id: "css", name: "CSS" },
+    { id: "tailwind", name: "Tailwind CSS" },
+    { id: "hardware", name: "Hardware" },
+    { id: "ergonomics", name: "Ergonomics" },
+    { id: "keyboards", name: "Keyboards" },
+    { id: "monitors", name: "Monitors" },
+    { id: "ssr", name: "SSR" },
+    { id: "state-management", name: "State Management" },
+    { id: "animation", name: "Animation" },
+    { id: "performance", name: "Performance" },
+    { id: "accessibility", name: "Accessibility" },
+    { id: "ui-design", name: "UI Design" },
+    { id: "web-design", name: "Web Design" },
+  ],
 };

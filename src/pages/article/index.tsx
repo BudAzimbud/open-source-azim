@@ -3,22 +3,34 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
+import articleData from '@/datas/article';
 
 // Types
 interface Article {
   id: number;
+  slug: string;
   title: string;
   excerpt: string;
   content: string;
-  author: string;
+  author: {
+    id: number;
+    name: string;
+    avatar: string;
+    bio: string;
+  };
   publishedAt: string;
+  updatedAt?: string | null;
   readTime: string;
   category: string;
+  categoryColor: string;
   tags: string[];
-  image?: string;
-  likes: number;
-  views: number;
-  comments: number;
+  image: string;
+  stats: {
+    likes: number;
+    views: number;
+    comments: number;
+  };
+  related: number[];
 }
 
 interface QuestionVote {
@@ -32,7 +44,7 @@ interface QuestionVote {
   submittedAt: string;
 }
 
-// Sample data
+// Sample questions data
 const sampleQuestions: QuestionVote[] = [
   {
     id: 1,
@@ -66,69 +78,6 @@ const sampleQuestions: QuestionVote[] = [
   }
 ];
 
-const sampleArticles: Article[] = [
-  {
-    id: 1,
-    title: "Complete Guide to Building Modern React Applications",
-    excerpt: "Learn how to build scalable and maintainable React applications using the latest best practices and tools.",
-    content: "",
-    author: "Azim",
-    publishedAt: "2024-01-15",
-    readTime: "8 min",
-    category: "Development",
-    tags: ["React", "JavaScript", "Frontend"],
-    image: "/api/placeholder/600/300",
-    likes: 45,
-    views: 1200,
-    comments: 8
-  },
-  {
-    id: 2,
-    title: "My 2024 Productivity Setup: Tools and Workflows",
-    excerpt: "A deep dive into the tools, apps, and workflows that help me stay productive as a developer and content creator.",
-    content: "",
-    author: "Azim",
-    publishedAt: "2024-01-12",
-    readTime: "6 min",
-    category: "Productivity",
-    tags: ["Productivity", "Tools", "Workflow"],
-    image: "/api/placeholder/600/300",
-    likes: 67,
-    views: 2100,
-    comments: 15
-  },
-  {
-    id: 3,
-    title: "Building a Custom Mechanical Keyboard: Complete Guide",
-    excerpt: "Everything you need to know about building your own mechanical keyboard, from switches to keycaps.",
-    content: "",
-    author: "Azim",
-    publishedAt: "2024-01-08",
-    readTime: "12 min",
-    category: "Hardware",
-    tags: ["Keyboard", "Hardware", "DIY"],
-    image: "/api/placeholder/600/300",
-    likes: 89,
-    views: 3200,
-    comments: 23
-  },
-  {
-    id: 4,
-    title: "TypeScript Best Practices for Large Applications",
-    excerpt: "Advanced TypeScript patterns and practices for building maintainable large-scale applications.",
-    content: "",
-    author: "Azim",
-    publishedAt: "2024-01-05",
-    readTime: "10 min",
-    category: "Development",
-    tags: ["TypeScript", "JavaScript", "Best Practices"],
-    image: "/api/placeholder/600/300",
-    likes: 34,
-    views: 980,
-    comments: 6
-  }
-];
-
 export default function ArticlesPage() {
   const [questions, setQuestions] = useState(sampleQuestions);
   const [showVoteForm, setShowVoteForm] = useState(false);
@@ -140,7 +89,8 @@ export default function ArticlesPage() {
     category: 'Development'
   });
 
-  const categories = ['All', 'Development', 'Hardware', 'Productivity', 'Technology', 'Design'];
+  // Extract categories from article data
+  const categories = ['All', ...new Set(articleData.categories.map(cat => cat.name))];
 
   // Handle vote
   const handleVote = (questionId: number) => {
@@ -171,22 +121,28 @@ export default function ArticlesPage() {
     setShowVoteForm(false);
   };
 
-  // Filter articles
+  // Filter articles from article data
   const filteredArticles = selectedCategory === 'All' 
-    ? sampleArticles 
-    : sampleArticles.filter(article => article.category === selectedCategory);
+    ? articleData.articles 
+    : articleData.articles.filter(article => article.category === selectedCategory);
 
   // Sort articles
   const sortedArticles = [...filteredArticles].sort((a, b) => {
     switch (sortBy) {
       case 'popular':
-        return b.views - a.views;
+        return b.stats.views - a.stats.views;
       case 'liked':
-        return b.likes - a.likes;
+        return b.stats.likes - a.stats.likes;
       default:
         return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
     }
   });
+
+  // Helper function to get category color
+  const getCategoryColor = (categoryName: string): string => {
+    const category = articleData.categories.find(cat => cat.name === categoryName);
+    return category ? category.color : 'blue';
+  };
 
   return (
     <>
@@ -333,7 +289,8 @@ export default function ArticlesPage() {
                     <Image
                       src={article.image}
                       alt={article.title}
-                      fill
+                      width={600}
+                      height={300}
                       className="object-cover"
                     />
                   ) : (
@@ -347,9 +304,9 @@ export default function ArticlesPage() {
                   {/* Category Badge */}
                   <div className="absolute top-4 left-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${
-                      article.category === 'Development' ? 'bg-green-500/80 text-white' :
-                      article.category === 'Hardware' ? 'bg-purple-500/80 text-white' :
-                      article.category === 'Productivity' ? 'bg-orange-500/80 text-white' :
+                      article.categoryColor === 'green' ? 'bg-green-500/80 text-white' :
+                      article.categoryColor === 'purple' ? 'bg-purple-500/80 text-white' :
+                      article.categoryColor === 'orange' ? 'bg-orange-500/80 text-white' :
                       'bg-blue-500/80 text-white'
                     }`}>
                       {article.category}
@@ -364,7 +321,7 @@ export default function ArticlesPage() {
                     <span>•</span>
                     <span>{article.readTime} read</span>
                     <span>•</span>
-                    <span>by {article.author}</span>
+                    <span>by {article.author.name}</span>
                   </div>
 
                   <h2 className="text-xl font-semibold text-gray-900 mb-3 leading-tight">
@@ -391,25 +348,25 @@ export default function ArticlesPage() {
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
-                        <span>{article.likes}</span>
+                        <span>{article.stats.likes}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
-                        <span>{article.views}</span>
+                        <span>{article.stats.views}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                         </svg>
-                        <span>{article.comments}</span>
+                        <span>{article.stats.comments}</span>
                       </div>
                     </div>
 
                     <Link
-                      href={`/article/${article.id}`}
+                      href={`/article/${article.slug}`}
                       className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-medium transition-all duration-300 hover:scale-105"
                     >
                       Read More →
@@ -482,11 +439,9 @@ export default function ArticlesPage() {
                     onChange={(e) => setNewQuestion({...newQuestion, category: e.target.value})}
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-900 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   >
-                    <option value="Development">Development</option>
-                    <option value="Hardware">Hardware</option>
-                    <option value="Productivity">Productivity</option>
-                    <option value="Technology">Technology</option>
-                    <option value="Design">Design</option>
+                    {articleData.categories.map(category => (
+                      <option key={category.id} value={category.name}>{category.name}</option>
+                    ))}
                   </select>
                 </div>
               </div>
