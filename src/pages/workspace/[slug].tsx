@@ -1,8 +1,10 @@
 import Footer from "@/components/Footer";
 import CommentSection from "@/components/CommentSection";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
+import { workspaceList } from "@/datas/workspace";
+import { useRouter } from "next/router";
 
 // Hotspot Component for better organization
 function HotspotComponent({
@@ -67,7 +69,13 @@ function HotspotComponent({
         onSelect(object.id);
       }}
       onMouseEnter={() => onHover(object.id)}
-      onMouseLeave={() => onHover(null)}
+      onMouseLeave={(e) => {
+        // Only remove hover if mouse is not entering the delete button
+        const related = e.relatedTarget as HTMLElement | null;
+        if (!related || !related.classList.contains('hotspot-delete-btn')) {
+          onHover(null);
+        }
+      }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
@@ -116,15 +124,16 @@ function HotspotComponent({
              }}></div>
       </div>
 
-      {/* Edit Mode Controls */}
-      {isEditMode && isHovered && (
-        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 flex gap-1">
+      {/* Edit Mode Controls: always show delete button in edit mode */}
+      {isEditMode && (
+        <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 flex gap-1 z-20">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onDelete(object.id);
             }}
-            className="bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded"
+            className="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded hotspot-delete-btn shadow-lg"
+            title="Delete Hotspot"
           >
             ×
           </button>
@@ -176,10 +185,36 @@ const setupObjects: SetupObject[] = [
 ];
 
 export default function Store() {
+  const router = useRouter();
+  const slug = router.query.slug as string;
+  const workspace = workspaceList.find(ws => ws.id === slug);
   const [selectedObject, setSelectedObject] = useState<number | null>(null);
   const [hoveredObject, setHoveredObject] = useState<number | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [editableObjects, setEditableObjects] = useState(setupObjects);
+  const [editableObjects, setEditableObjects] = useState<SetupObject[]>(setupObjects);
+  // Load editableObjects from localStorage after slug is available
+  useEffect(() => {
+    if (typeof window !== "undefined" && slug) {
+      const saved = localStorage.getItem(`editableObjects-${slug}`);
+      if (saved) {
+        try {
+          setEditableObjects(JSON.parse(saved));
+        } catch {
+          setEditableObjects(setupObjects);
+        }
+      } else {
+        setEditableObjects(setupObjects);
+      }
+    }
+    // eslint-disable-next-line
+  }, [slug]);
+  // Persist editableObjects to localStorage whenever it changes
+  // and slug is available
+  useEffect(() => {
+    if (typeof window !== "undefined" && slug) {
+      localStorage.setItem(`editableObjects-${slug}`, JSON.stringify(editableObjects));
+    }
+  }, [editableObjects, slug]);
   const [isAddingNew, setIsAddingNew] = useState(false);
   const [isWaitingForPosition, setIsWaitingForPosition] = useState(false);
   const [isEditingObject, setIsEditingObject] = useState(false);
@@ -329,7 +364,7 @@ export default function Store() {
       `}</style>
       
       <div className="min-h-screen bg-gray-50">
-      <div className="bg-white shadow-sm">
+      <div className="bg-white mt-17 shadow-sm">
         <div className="max-w-7xl mx-auto px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
@@ -384,7 +419,7 @@ export default function Store() {
     
 
       {/* Interactive Setup Image */}
-      <div className="max-w-7xl mx-auto px-8 py-12">
+      <div className="max-w-7xl  mx-auto px-8 py-12">
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
           <div className="relative">
             {/* Your actual setup image */}
@@ -395,7 +430,7 @@ export default function Store() {
               onClick={handleImageClick}
             >
               <Image
-                src="/workspace_azim.webp"
+                src={workspace?.image || "/file.svg"}
                 alt="Computer Setup"
                 fill
                 className="object-cover"
@@ -869,29 +904,33 @@ export default function Store() {
           <div className="grid md:grid-cols-3 gap-8">
             {/* Workspace Details */}
             <div className="md:col-span-2">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">About This Workspace</h2>
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">{workspace?.title || "Workspace"}</h2>
               <p className="text-gray-600 mb-6 leading-relaxed">
-                This is my personal gaming and productivity setup that I've been refining over the years. 
-                Each component has been carefully selected for both performance and aesthetics. 
-                Feel free to ask questions about any of the items - I love sharing insights about gear and setup tips!
+                {workspace?.description || "No description available."}
               </p>
-              
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 rounded-lg p-4">
                   <h3 className="font-medium text-gray-900 mb-2">Setup Type</h3>
-                  <p className="text-gray-600">Gaming & Productivity</p>
+                  <p className="text-gray-600">{workspace?.category || "-"}</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <h3 className="font-medium text-gray-900 mb-2">Total Items</h3>
-                  <p className="text-gray-600">{editableObjects.length} components</p>
+                  <p className="text-gray-600">{workspace?.itemCount ?? editableObjects.length} components</p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <h3 className="font-medium text-gray-900 mb-2">Last Updated</h3>
-                  <p className="text-gray-600">December 2024</p>
+                  <p className="text-gray-600">
+                    {workspace?.lastUpdated
+                      ? new Date(workspace.lastUpdated).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                        })
+                      : "-"}
+                  </p>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="font-medium text-gray-900 mb-2">Budget Range</h3>
-                  <p className="text-gray-600">$3,000 - $5,000</p>
+                  <h3 className="font-medium text-gray-900 mb-2">Tags</h3>
+                  <p className="text-gray-600">{workspace?.tags?.join(", ") || "-"}</p>
                 </div>
               </div>
             </div>

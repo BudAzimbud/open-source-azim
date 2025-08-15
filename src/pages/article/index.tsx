@@ -5,33 +5,6 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import articleData from '@/datas/article';
 
-// Types
-interface Article {
-  id: number;
-  slug: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  author: {
-    id: number;
-    name: string;
-    avatar: string;
-    bio: string;
-  };
-  publishedAt: string;
-  updatedAt?: string | null;
-  readTime: string;
-  category: string;
-  categoryColor: string;
-  tags: string[];
-  image: string;
-  stats: {
-    likes: number;
-    views: number;
-    comments: number;
-  };
-  related: number[];
-}
 
 interface QuestionVote {
   id: number;
@@ -79,6 +52,10 @@ const sampleQuestions: QuestionVote[] = [
 ];
 
 export default function ArticlesPage() {
+  // Example: Mapping workspaceList for display or linking
+  // You can use this array in your component as needed
+  // Example: Show workspace titles in a list
+  // const workspaceTitles = workspaceList.map(ws => ws.title);
   const [questions, setQuestions] = useState(sampleQuestions);
   const [showVoteForm, setShowVoteForm] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
