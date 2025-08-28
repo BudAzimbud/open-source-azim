@@ -863,7 +863,7 @@ export default function Home() {
               Why I Do What I Do
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              After 8 years in corporate tech, I started this journey to help
+              After 5 years in corporate tech, I started this journey to help
               real people solve real problems. Here's what makes working with me
               different
             </p>
