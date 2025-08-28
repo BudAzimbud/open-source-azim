@@ -142,80 +142,80 @@ export default function ArticlesPage() {
         </div>
 
         {/* Question Voting Section */}
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <div className="bg-white rounded-3xl shadow-xl overflow-hidden mb-12">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold mb-2">📝 Request Article Topics</h2>
-                  <p className="text-blue-100">
-                    Vote for questions you want answered, or submit your own!
-                  </p>
-                </div>
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+  <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl overflow-hidden mb-8 sm:mb-12">
+    <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 sm:p-6 lg:p-8 text-white">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-2">Request Article Topics</h2>
+          <p className="text-blue-100 text-sm sm:text-base">
+            Vote for questions you want answered, or submit your own!
+          </p>
+        </div>
+        <button
+          onClick={() => setShowVoteForm(true)}
+          className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 text-sm sm:text-base w-full sm:w-auto"
+        >
+          + Suggest Topic
+        </button>
+      </div>
+    </div>
+
+    <div className="p-4 sm:p-6 lg:p-8">
+      <div className="space-y-4 sm:space-y-6">
+        {questions.map((question) => (
+          <div key={question.id} className="border border-gray-200 rounded-xl sm:rounded-2xl p-4 sm:p-6 hover:shadow-md transition-shadow duration-300">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+              {/* Vote Button */}
+              <div className="flex sm:flex-col items-center sm:items-center justify-center sm:justify-start order-2 sm:order-1 sm:min-w-[80px]">
                 <button
-                  onClick={() => setShowVoteForm(true)}
-                  className="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
+                  onClick={() => handleVote(question.id)}
+                  className={`flex flex-col items-center p-3 rounded-xl transition-all duration-300 min-w-[70px] sm:min-w-[80px] ${
+                    question.userVoted
+                      ? 'bg-blue-50 text-blue-600 border-2 border-blue-200'
+                      : 'bg-gray-50 text-gray-600 border-2 border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200'
+                  }`}
                 >
-                  + Suggest Topic
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 4L14.5 9.5L20 10L15.5 14L16.5 20L12 17L7.5 20L8.5 14L4 10L9.5 9.5L12 4Z"/>
+                  </svg>
+                  <span className="font-bold text-base sm:text-lg">{question.votes}</span>
+                  <span className="text-xs">votes</span>
                 </button>
               </div>
-            </div>
 
-            <div className="p-8">
-              <div className="space-y-6">
-                {questions.map((question) => (
-                  <div key={question.id} className="border border-gray-200 rounded-2xl p-6 hover:shadow-md transition-shadow duration-300">
-                    <div className="flex gap-6">
-                      {/* Vote Button */}
-                      <div className="flex flex-col items-center min-w-[80px]">
-                        <button
-                          onClick={() => handleVote(question.id)}
-                          className={`flex flex-col items-center p-3 rounded-xl transition-all duration-300 ${
-                            question.userVoted
-                              ? 'bg-blue-50 text-blue-600 border-2 border-blue-200'
-                              : 'bg-gray-50 text-gray-600 border-2 border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200'
-                          }`}
-                        >
-                          <svg className="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 4L14.5 9.5L20 10L15.5 14L16.5 20L12 17L7.5 20L8.5 14L4 10L9.5 9.5L12 4Z"/>
-                          </svg>
-                          <span className="font-bold text-lg">{question.votes}</span>
-                          <span className="text-xs">votes</span>
-                        </button>
-                      </div>
-
-                      {/* Question Content */}
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-3">
-                            <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                              question.category === 'Development' ? 'bg-green-100 text-green-700' :
-                              question.category === 'Hardware' ? 'bg-purple-100 text-purple-700' :
-                              question.category === 'Technology' ? 'bg-blue-100 text-blue-700' :
-                              'bg-gray-100 text-gray-700'
-                            }`}>
-                              {question.category}
-                            </span>
-                            <span className="text-sm text-gray-500">
-                              by {question.submittedBy} • {question.submittedAt}
-                            </span>
-                          </div>
-                        </div>
-
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                          {question.question}
-                        </h3>
-                        <p className="text-gray-600 leading-relaxed">
-                          {question.description}
-                        </p>
-                      </div>
-                    </div>
+              {/* Question Content */}
+              <div className="flex-1 order-1 sm:order-2">
+                <div className="flex flex-col xs:flex-row xs:items-start xs:justify-between mb-3 gap-2 xs:gap-3">
+                  <div className="flex flex-col xs:flex-row xs:items-center gap-2 xs:gap-3">
+                    <span className={`inline-block px-2.5 sm:px-3 py-1 rounded-full text-xs font-medium w-fit ${
+                      question.category === 'Development' ? 'bg-green-100 text-green-700' :
+                      question.category === 'Hardware' ? 'bg-purple-100 text-purple-700' :
+                      question.category === 'Technology' ? 'bg-blue-100 text-blue-700' :
+                      'bg-gray-100 text-gray-700'
+                    }`}>
+                      {question.category}
+                    </span>
+                    <span className="text-xs sm:text-sm text-gray-500">
+                      by {question.submittedBy} • {question.submittedAt}
+                    </span>
                   </div>
-                ))}
+                </div>
+
+                <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 mb-2 leading-tight">
+                  {question.question}
+                </h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                  {question.description}
+                </p>
               </div>
             </div>
           </div>
-        </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
 
         {/* Filters and Search */}
         <div className="max-w-7xl mx-auto px-6 mb-8">

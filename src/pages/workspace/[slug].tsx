@@ -1100,54 +1100,60 @@ export default function Store() {
       )}
 
       {/* Legend */}
-      <div className="max-w-7xl mx-auto px-8 pb-12">
-        <div className="bg-white rounded-2xl p-6 shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Interactive Setup Guide {isEditMode && "(Edit Mode)"}
-          </h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {editableObjects.map((object) => (
-              <button
-                key={object.id}
-                onClick={() => setSelectedObject(object.id)}
-                className={`
-                  text-left p-4 rounded-xl border transition-all duration-200
-                  ${
-                    selectedObject === object.id
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                  }
-                  ${isEditMode ? "ring-1 ring-yellow-300" : ""}
-                `}
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <div
-                    className={`
-                    w-3 h-3 rounded-full
-                    ${
-                      selectedObject === object.id
-                        ? "bg-blue-500"
-                        : "bg-gray-400"
-                    }
-                  `}
-                  ></div>
-                  <span className="font-medium text-gray-900">
-                    {object.name}
-                  </span>
-                  {isEditMode && (
-                    <span className="text-xs text-gray-500">
-                      ({object.position.x}, {object.position.y})
-                    </span>
-                  )}
-                </div>
-                <p className="text-sm text-gray-600 truncate">
-                  {object.description}
-                </p>
-              </button>
-            ))}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-12">
+  <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm">
+    <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">
+      Interactive Setup Guide {isEditMode && "(Edit Mode)"}
+    </h3>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+      {editableObjects.map((object) => (
+        <button
+          key={object.id}
+          onClick={() => setSelectedObject(object.id)}
+          className={`
+            text-left p-3 sm:p-4 rounded-lg sm:rounded-xl border transition-all duration-200
+            ${
+              selectedObject === object.id
+                ? "border-blue-500 bg-blue-50"
+                : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+            }
+            ${isEditMode ? "ring-1 ring-yellow-300" : ""}
+          `}
+        >
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+            <div
+              className={`
+              w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full
+              ${
+                selectedObject === object.id
+                  ? "bg-blue-500"
+                  : "bg-gray-400"
+              }
+            `}
+            ></div>
+            <span className="font-medium text-gray-900 text-sm sm:text-base">
+              {object.name}
+            </span>
+            {isEditMode && (
+              <span className="text-xs text-gray-500 hidden sm:inline">
+                ({object.position.x}, {object.position.y})
+              </span>
+            )}
           </div>
-        </div>
-      </div>
+          {/* Mobile: Show coordinates below on separate line when in edit mode */}
+          {isEditMode && (
+            <div className="text-xs text-gray-500 mb-2 sm:hidden">
+              Position: ({object.position.x}, {object.position.y})
+            </div>
+          )}
+          <p className="text-xs sm:text-sm text-gray-600 truncate">
+            {object.description}
+          </p>
+        </button>
+      ))}
+    </div>
+  </div>
+</div>
 
       {/* Workspace Info Section */}
       <div className="max-w-7xl mx-auto px-8 py-8">

@@ -350,11 +350,11 @@ export default function Home() {
         <div className={`relative z-10 flex items-center justify-center min-h-screen p-8 transition-all duration-800 ${
           isAnimating ? 'opacity-50 transform scale-95' : 'opacity-100 transform scale-100'
         }`}>
-          <div className="max-w-7xl w-full">
+          <div className="lg:max-w-7xl lg:mt-0 mt-10 w-full">
             {/* Left Content */}
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="md:grid  lg:grid-cols-2 gap-12 items-center">
               <div className="text-white space-y-6">
-                <h1 className="text-6xl md:text-7xl font-light tracking-wide transition-all duration-500">
+                <h1 className="text-4xl md:text-7xl font-light tracking-wide transition-all duration-500">
                   {currentService.name}
                 </h1>
                 <p className="text-lg md:text-xl text-white/90 leading-relaxed max-w-md transition-all duration-500">
@@ -374,9 +374,9 @@ export default function Home() {
               </div>
 
               {/* Slider Section */}
-              <div className="relative">
+              <div className="relative lg:mt-10 mt-20">
                 {/* Cards Container */}
-                <div className="flex gap-4 overflow-hidden">
+                <div className="flex md:gap-4 gap-1 overflow-hidden">
                   {getVisibleServices().map((service, index) => {
                     const isMainCard = index === 0;
                     const isAnimatingCard = isAnimating && isMainCard;
@@ -388,8 +388,8 @@ export default function Home() {
                         className={`
                           relative rounded-2xl overflow-hidden cursor-pointer group
                           ${isMainCard 
-                            ? 'w-80 h-96 opacity-100 ring-white/30' 
-                            : 'w-48 h-64 opacity-70 hover:opacity-90'
+                            ? 'md:w-80 md:h-96 opacity-100 ring-white/30' 
+                            : 'w-48 md:h-64 opacity-70 hover:opacity-90'
                           }
                           ${isAnimatingCard
                             ? 'transition-all duration-1200 ease-out transform  z-50'
@@ -464,7 +464,7 @@ export default function Home() {
                 </div>
 
                 {/* Navigation Arrows */}
-                <div className={`flex gap-3 mt-6 justify-center lg:justify-start transition-all duration-500 ${
+                <div className={`flex gap-3 md:mt-6 justify-center lg:justify-start transition-all duration-500 ${
                   isAnimating ? 'opacity-0 pointer-events-none' : 'opacity-100'
                 }`}>
                   <button
