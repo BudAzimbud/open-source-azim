@@ -2305,11 +2305,11 @@ export default function Home() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Our Office Location</h3>
-                  <p className="text-gray-600">123 Business Street, Suite 100, New York, NY 10001</p>
-                  <button className="mt-4 bg-white text-blue-600 px-6 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">My place</h3>
+                  <p className="text-gray-600 mb-10">Denpasar Utara , Bali</p>
+                  <a href="https://wa.me/62895323496371" className=" bg-white text-blue-600 px-6 py-2 rounded-lg font-medium hover:bg-gray-50 transition-colors">
                     Get Directions
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>
