@@ -1432,7 +1432,7 @@ export default function Home() {
                 <input
                   type="email"
                   placeholder="Enter your email address"
-                  className="flex-1 px-6 py-4 rounded-xl text-gray-900 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  className="flex-1 px-6 py-4 rounded-xl text-white placeholder-white  focus:ring-2 focus:ring-white/50"
                 />
                 <button className="bg-white text-blue-600 px-8 py-4 rounded-xl font-medium hover:bg-gray-100 transition-colors">
                   Count Me In
@@ -1546,7 +1546,7 @@ export default function Home() {
                 min="1"
                 value={customAmount}
                 onChange={(e) => setCustomAmount(e.target.value)}
-                className="flex-1 text-gray-900 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent text-center text-xl"
+                className="flex-1 text-gray-900 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-transparent text-center "
               />
               <span className="text-2xl">☕</span>
             </div>
