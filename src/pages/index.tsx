@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
+import PortfolioSection from "@/components/PortfolioSection";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,164 +31,60 @@ interface SupportStats {
   coffeeShops: number;
 }
 
-// Portfolio data with categories
-const portfolioData = [
-  {
-    id: 1,
-    category: "Web Development",
-    title: "Learning Management System",
-    description:
-      "Comprehensive LMS platform with course management, student tracking, assignments, and interactive learning tools for educational institutions.",
-    image:
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop&crop=center",
-    tags: ["React", "Node.js", "MongoDB"],
-    year: "2024",
-    categoryColor: "blue",
-    categoryLabel: "Education",
-  },
-  {
-    id: 2,
-    category: "Web Development",
-    title: "Customer Relationship Management",
-    description:
-      "Advanced CRM system with lead management, sales pipeline, customer analytics, and automated marketing campaigns for growing businesses.",
-    image:
-      "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=600&h=400&fit=crop&crop=center",
-    tags: ["Vue.js", "Laravel", "MySQL"],
-    year: "2023",
-    categoryColor: "green",
-    categoryLabel: "Enterprise",
-  },
-  {
-    id: 3,
-    category: "Web Development",
-    title: "Insurance Management System",
-    description:
-      "Complete insurance platform with policy management, claims processing, customer portal, and automated underwriting for insurance companies.",
-    image:
-      "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=400&fit=crop&crop=center",
-    tags: ["Angular", "Spring Boot", "PostgreSQL"],
-    year: "2022",
-    categoryColor: "purple",
-    categoryLabel: "Insurance",
-  },
-  {
-    id: 4,
-    category: "Web Development",
-    title: "Regional Business Development",
-    description:
-      "Strategic business development platform with market analysis, partnership management, and growth tracking for regional expansion initiatives.",
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&crop=center",
-    tags: ["React", "Django", "Redis"],
-    year: "2021",
-    categoryColor: "orange",
-    categoryLabel: "Business",
-  },
-  {
-    id: 5,
-    category: "Mobile Apps",
-    title: "Medical Record System",
-    description:
-      "Secure electronic health records system with patient management, appointment scheduling, and medical history tracking for healthcare providers.",
-    image:
-      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=600&h=400&fit=crop&crop=center",
-    tags: ["Next.js", "Node.js", "MongoDB"],
-    year: "2025",
-    categoryColor: "pink",
-    categoryLabel: "Healthcare",
-  },
-  {
-    id: 6,
-    category: "Web Development",
-    title: "Human Resource Information System",
-    description:
-      "Comprehensive HRIS with employee management, payroll processing, performance tracking, and recruitment workflows for modern organizations.",
-    image:
-      "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop&crop=center",
-    tags: ["Vue.js", "PHP", "MySQL"],
-    year: "2023",
-    categoryColor: "indigo",
-    categoryLabel: "HR",
-  },
-  {
-    id: 7,
-    category: "E-commerce",
-    title: "Investment Management Platform",
-    description:
-      "Advanced investment platform with portfolio management, real-time market data, risk analysis, and automated trading strategies for investors.",
-    image:
-      "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop&crop=center",
-    tags: ["React", "Python", "PostgreSQL"],
-    year: "2022",
-    categoryColor: "emerald",
-    categoryLabel: "FinTech",
-  },
-  {
-    id: 8,
-    category: "E-commerce",
-    title: "Cryptocurrency Exchange",
-    description:
-      "Secure cryptocurrency exchange platform with spot trading, futures, staking, and wallet management with advanced security features.",
-    image:
-      "https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&h=400&fit=crop&crop=center",
-    tags: ["Angular", "Node.js", "Redis"],
-    year: "2021",
-    categoryColor: "yellow",
-    categoryLabel: "Crypto",
-  },
-  {
-    id: 9,
-    category: "Mobile Apps",
-    title: "Sandbox Point of Sale",
-    description:
-      "Modern POS system with inventory management, sales analytics, customer loyalty programs, and multi-payment gateway integration for retail businesses.",
-    image:
-      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&crop=center",
-    tags: ["Vue.js", "Laravel", "MySQL"],
-    year: "2024",
-    categoryColor: "teal",
-    categoryLabel: "Retail",
-  },
-];
-
 const services = [
   {
-    id: 3,
-    name: "Web Development",
-    category: "Development",
+    id: 1,
+    name: "Full-Stack Development",
+    category: "Web Development",
     image:
       "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&h=600&fit=crop&crop=center",
     description:
-      "I build websites that actually work and look amazing. No cookie-cutter templates here - just custom solutions that fit you perfectly.",
-  },
-  {
-    id: 1,
-    name: "Virtual Assistant",
-    category: "AI Services",
-    image:
-      "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&h=600&fit=crop&crop=center",
-    description:
-      "I help entrepreneurs like you reclaim their time. Let me handle the routine stuff while you focus on growing your business and living your life.",
+      "Building scalable web applications from database to UI. Expert in React, Node.js, and modern JavaScript frameworks for enterprise solutions.",
   },
   {
     id: 2,
-    name: "Quality Assurance",
-    category: "Testing Services",
+    name: "Mobile App Development",
+    category: "Mobile Development",
     image:
-      "https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop&crop=center",
+      "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&h=600&fit=crop&crop=center",
     description:
-      "I've broken countless apps (on purpose!) so yours won't break when it matters. Your users will thank you later.",
+      "Native and cross-platform mobile applications using React Native and Flutter. From concept to deployment on iOS and Android.",
   },
-
+  {
+    id: 3,
+    name: "API & Backend Services",
+    category: "Backend Development",
+    image:
+      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&fit=crop&crop=center",
+    description:
+      "RESTful APIs, GraphQL, microservices architecture. Built for performance, security, and scalability with Node.js, Python, and Laravel.",
+  },
   {
     id: 4,
-    name: "Digital Marketing",
-    category: "Marketing",
+    name: "Database Design & Optimization",
+    category: "Database",
+    image:
+      "https://images.unsplash.com/photo-1544383835-bda2bc66a55d?w=800&h=600&fit=crop&crop=center",
+    description:
+      "Database architecture, query optimization, and data modeling. Experience with MySQL, PostgreSQL, MongoDB, and Redis for high-performance systems.",
+  },
+  {
+    id: 5,
+    name: "DevOps & Cloud Infrastructure",
+    category: "Infrastructure",
+    image:
+      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop&crop=center",
+    description:
+      "CI/CD pipelines, Docker containers, AWS/Azure deployment. Automated workflows that save time and reduce errors in production.",
+  },
+  {
+    id: 6,
+    name: "Technical Consulting",
+    category: "Consulting",
     image:
       "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center",
     description:
-      "I help you get noticed online without being annoying. Real strategies that bring real customers, not just vanity metrics.",
+      "Architecture reviews, technology stack selection, and code audits. Strategic guidance for scaling your development team and infrastructure.",
   },
 ];
 
@@ -211,12 +108,6 @@ export default function Home() {
     bugsFixed: 1284,
     coffeeShops: 23,
   });
-
-  // Filter portfolio items based on active filter
-  const filteredPortfolio =
-    activeFilter === "All Projects"
-      ? portfolioData
-      : portfolioData.filter((item) => item.category === activeFilter);
 
   // Load recent supporters on component mount
   useEffect(() => {
@@ -1179,814 +1070,24 @@ export default function Home() {
             coffee (virtual or real) and see if we're a good fit.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-medium transition-colors">
+            <a
+              href="https://wa.me/0895323496371"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-medium transition-colors"
+            >
               Let's Chat (It's Free)
-            </button>
-            <button className="border border-gray-600 hover:border-gray-400 text-white px-8 py-4 rounded-lg font-medium transition-colors">
+            </a>
+            <a
+              href="/portfolio"
+              className="border border-gray-600 hover:border-gray-400 text-white px-8 py-4 rounded-lg font-medium transition-colors"
+            >
               See My Work First
-            </button>
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Portfolio Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-6">
-              My Recent Work
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Every project tells a story. Here are some of my favorites from
-              the past year
-            </p>
-          </div>
-
-          {/* Portfolio Filter */}
-          <div className="flex flex-wrap justify-center gap-4 mb-12">
-            {[
-              "All Projects",
-              "Web Development",
-              "Mobile Apps",
-              "E-commerce",
-              "Branding",
-            ].map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`px-6 py-2 rounded-full font-medium transition-colors ${
-                  activeFilter === filter
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {filter}
-              </button>
-            ))}
-          </div>
-
-          {/* Portfolio Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Portfolio Item 1 - LMS */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop&crop=center"
-                  alt="Learning Management System"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-                    Education
-                  </span>
-                  <span className="text-sm text-gray-500">2024</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Learning Management System
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Comprehensive LMS platform with course management, student
-                  tracking, assignments, and interactive learning tools for
-                  educational institutions.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    React
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Node.js
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    MongoDB
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 2 - CRM */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=600&h=400&fit=crop&crop=center"
-                  alt="Customer Relationship Management"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full">
-                    Enterprise
-                  </span>
-                  <span className="text-sm text-gray-500">2024</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Customer Relationship Management
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Advanced CRM system with lead management, sales pipeline,
-                  customer analytics, and automated marketing campaigns for
-                  growing businesses.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Vue.js
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Laravel
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    MySQL
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 3 - Insurance */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=400&fit=crop&crop=center"
-                  alt="Insurance Management System"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-purple-600 bg-purple-50 px-3 py-1 rounded-full">
-                    Insurance
-                  </span>
-                  <span className="text-sm text-gray-500">2024</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Insurance Management System
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Complete insurance platform with policy management, claims
-                  processing, customer portal, and automated underwriting for
-                  insurance companies.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Angular
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Spring Boot
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    PostgreSQL
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 4 - RBD */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&h=400&fit=crop&crop=center"
-                  alt="Regional Business Development"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
-                    Business
-                  </span>
-                  <span className="text-sm text-gray-500">2023</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Regional Business Development
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Strategic business development platform with market analysis,
-                  partnership management, and growth tracking for regional
-                  expansion initiatives.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    React
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Django
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Redis
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 5 - Medical Record */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=600&h=400&fit=crop&crop=center"
-                  alt="Medical Record System"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-pink-600 bg-pink-50 px-3 py-1 rounded-full">
-                    Healthcare
-                  </span>
-                  <span className="text-sm text-gray-500">2023</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Medical Record System
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Secure electronic health records system with patient
-                  management, appointment scheduling, and medical history
-                  tracking for healthcare providers.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Next.js
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Node.js
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    MongoDB
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 6 - HRIS */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&h=400&fit=crop&crop=center"
-                  alt="Human Resource Information System"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">
-                    HR
-                  </span>
-                  <span className="text-sm text-gray-500">2023</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Human Resource Information System
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Comprehensive HRIS with employee management, payroll
-                  processing, performance tracking, and recruitment workflows
-                  for modern organizations.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Vue.js
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    PHP
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    MySQL
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 7 - Investment */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop&crop=center"
-                  alt="Investment Management Platform"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
-                    FinTech
-                  </span>
-                  <span className="text-sm text-gray-500">2023</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Investment Management Platform
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Advanced investment platform with portfolio management,
-                  real-time market data, risk analysis, and automated trading
-                  strategies for investors.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    React
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Python
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    PostgreSQL
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 8 - Exchange */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=600&h=400&fit=crop&crop=center"
-                  alt="Cryptocurrency Exchange"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-yellow-600 bg-yellow-50 px-3 py-1 rounded-full">
-                    Crypto
-                  </span>
-                  <span className="text-sm text-gray-500">2022</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Cryptocurrency Exchange
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Secure cryptocurrency exchange platform with spot trading,
-                  futures, staking, and wallet management with advanced security
-                  features.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Angular
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Node.js
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Redis
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Portfolio Item 9 - Sandbox POS */}
-            <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&crop=center"
-                  alt="Point of Sale System"
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </button>
-                    <button className="bg-white/90 backdrop-blur-sm rounded-full p-3 text-gray-900 hover:bg-white transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-teal-600 bg-teal-50 px-3 py-1 rounded-full">
-                    Retail
-                  </span>
-                  <span className="text-sm text-gray-500">2022</span>
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Sandbox Point of Sale
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Modern POS system with inventory management, sales analytics,
-                  customer loyalty programs, and multi-payment gateway
-                  integration for retail businesses.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Vue.js
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    Laravel
-                  </span>
-                  <span className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                    MySQL
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Load More Button */}
-          <div className="text-center mt-12">
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-medium transition-colors duration-300 hover:scale-105 transform">
-              Load More Projects
-            </button>
-          </div>
-
-          {/* Portfolio Stats */}
-          <div className="mt-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white">
-            <div className="grid md:grid-cols-4 gap-8 text-center">
-              <div>
-                <div className="text-4xl font-light mb-2">150+</div>
-                <div className="text-blue-100">Projects Delivered</div>
-              </div>
-              <div>
-                <div className="text-4xl font-light mb-2">95%</div>
-                <div className="text-blue-100">Client Satisfaction</div>
-              </div>
-              <div>
-                <div className="text-4xl font-light mb-2">25+</div>
-                <div className="text-blue-100">Industries Served</div>
-              </div>
-              <div>
-                <div className="text-4xl font-light mb-2">5+</div>
-                <div className="text-blue-100">Years Experience</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Portfolio Section - Now using separate component */}
+      <PortfolioSection />
 
       {/* Articles/Blog Section */}
       <section className="py-20 bg-gray-50">
@@ -2521,19 +1622,19 @@ export default function Home() {
                 ) : (
                   // Fallback static supporters
                   <>
-                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
+                    <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
                       MK
                     </div>
-                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
+                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
                       SL
                     </div>
-                    <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
+                    <div className="w-10 h-10 bg-purple-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
                       JD
                     </div>
-                    <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
+                    <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
                       AR
                     </div>
-                    <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white text-sm font-semibold border-2 border-white">
+                    <div className="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white text-sm font-semibold">
                       LC
                     </div>
                   </>
@@ -2904,7 +2005,7 @@ export default function Home() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0zM5 11a9 9 0 0018 0 9 9 0 00-18 0z"
                       />
                     </svg>
                   </div>
@@ -3234,7 +2335,7 @@ export default function Home() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         strokeWidth={2}
-                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0zM5 11a9 9 0 0018 0 9 9 0 00-18 0z"
                       />
                     </svg>
                   </div>
