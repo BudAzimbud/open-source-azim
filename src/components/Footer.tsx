@@ -2,20 +2,20 @@ import React from "react";
 
 function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-16">
+    <footer className="bg-[#0F0F0F] text-[#F3F4F6] py-16">
       <div className="max-w-7xl mx-auto px-8">
         <div className="grid md:grid-cols-2 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-white text-xl font-semibold mb-4">Azim</h3>
-            <p className="text-gray-400 mb-4">
+            <h3 className="text-[#FACC15] text-xl font-semibold mb-4">Azim</h3>
+            <p className="text-[#F3F4F6]/70 mb-4">
               Transforming businesses through innovative technology solutions
               and expert services.
             </p>
             <div className="flex space-x-4">
               <a
                 href="#"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-[#F3F4F6]/70 hover:text-[#FACC15] transition-colors"
               >
                 <svg
                   className="w-5 h-5"
@@ -27,7 +27,7 @@ function Footer() {
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-[#F3F4F6]/70 hover:text-[#FACC15] transition-colors"
               >
                 <svg
                   className="w-5 h-5"
@@ -39,7 +39,7 @@ function Footer() {
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-[#F3F4F6]/70 hover:text-[#FACC15] transition-colors"
               >
                 <svg
                   className="w-5 h-5"
@@ -54,12 +54,12 @@ function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Contact</h4>
+            <h4 className="text-[#FACC15] font-semibold mb-4">Contact</h4>
             <ul className="space-y-2">
               <li>
                 <a
                   href="mailto:budazimbud@gmail.com"
-                  className="text-blue-400 hover:underline"
+                  className="text-[#FACC15] hover:underline"
                 >
                   budazimbud@gmail.com
                 </a>
@@ -69,7 +69,7 @@ function Footer() {
                   href="https://wa.me/62895323496371"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-green-400 hover:underline"
+                  className="text-[#FACC15] hover:underline"
                 >
                   WhatsApp: +62 895-3234-96371
                 </a>
@@ -79,7 +79,7 @@ function Footer() {
                   href="https://www.linkedin.com/in/azim-37a2ba358/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-300 hover:underline"
+                  className="text-[#FACC15] hover:underline"
                 >
                   LinkedIn: Azim .
                 </a>
@@ -89,34 +89,34 @@ function Footer() {
                   href="https://github.com/BudAzimbud"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-300 hover:underline"
+                  className="text-[#FACC15] hover:underline"
                 >
                   GitHub: BudAzimbud
                 </a>
               </li>
-              <li className="text-gray-400">Denpasar, Bali</li>
+              <li className="text-[#F3F4F6]/70">Denpasar, Bali</li>
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-400">© 2025 Azim. All rights reserved.</p>
+        <div className="border-t border-[#F3F4F6]/20 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-[#F3F4F6]/70">© 2025 Azim. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a
               href="#"
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[#F3F4F6]/70 hover:text-[#FACC15] transition-colors"
             >
               Privacy Policy
             </a>
             <a
               href="#"
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[#F3F4F6]/70 hover:text-[#FACC15] transition-colors"
             >
               Terms of Service
             </a>
             <a
               href="#"
-              className="text-gray-400 hover:text-white transition-colors"
+              className="text-[#F3F4F6]/70 hover:text-[#FACC15] transition-colors"
             >
               Cookie Policy
             </a>

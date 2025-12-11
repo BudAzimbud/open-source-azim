@@ -19,14 +19,14 @@ export default function PortfolioSection() {
     });
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-[#0F0F0F]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-gray-900 mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-[#F3F4F6] mb-6">
             Enterprise Solutions I've Built
           </h2>
-          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-[#F3F4F6]/70 max-w-3xl mx-auto">
             Full-stack applications that solve real business problems for
             companies across various industries
           </p>
@@ -46,7 +46,7 @@ export default function PortfolioSection() {
 // Portfolio Card Component
 function PortfolioCard({ project }: { project: PortfolioItem }) {
   return (
-    <div className="group bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+    <div className="group bg-[#0F0F0F] border border-[#F3F4F6]/10 rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:border-[#FACC15]/50 transition-all duration-500 hover:-translate-y-2">
       <div className="relative overflow-hidden h-48 sm:h-64">
         {project.image ? (
           <Image
@@ -59,11 +59,11 @@ function PortfolioCard({ project }: { project: PortfolioItem }) {
           <div
             style={{
               backgroundImage:
-                "linear-gradient(90deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%)",
+                "linear-gradient(90deg, #FACC15 0%, #FACC15 50%, #FACC15 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
-            className="flex items-center justify-center h-full w-full text-white text-4xl font-bold select-none"
+            className="flex items-center justify-center h-full w-full bg-[#0F0F0F] text-4xl font-bold select-none"
           >
             {project.title
               .split(" ")
@@ -83,7 +83,7 @@ function PortfolioCard({ project }: { project: PortfolioItem }) {
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-white/90 backdrop-blur-sm rounded-full p-2 sm:p-3 text-gray-900 hover:bg-white transition-colors"
+                className="bg-[#FACC15]/90 backdrop-blur-sm rounded-full p-2 sm:p-3 text-[#0F0F0F] hover:bg-[#FACC15] transition-colors"
               >
                 <svg
                   className="w-4 h-4 sm:w-5 sm:h-5"
@@ -106,7 +106,7 @@ function PortfolioCard({ project }: { project: PortfolioItem }) {
                 </svg>
               </a>
             ) : (
-              <button className="bg-white/90 backdrop-blur-sm rounded-full p-2 sm:p-3 text-gray-900 hover:bg-white transition-colors">
+              <button className="bg-[#FACC15]/90 backdrop-blur-sm rounded-full p-2 sm:p-3 text-[#0F0F0F] hover:bg-[#FACC15] transition-colors">
                 <svg
                   className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="none"
@@ -139,16 +139,16 @@ function PortfolioCard({ project }: { project: PortfolioItem }) {
           >
             {project.categoryLabel}
           </span>
-          <span className="text-xs sm:text-sm text-gray-500">
+          <span className="text-xs sm:text-sm text-[#F3F4F6]/50">
             {project.year}
           </span>
         </div>
 
-        <h3 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
+        <h3 className="text-lg sm:text-xl font-semibold text-[#F3F4F6] mb-2 line-clamp-2">
           {project.title}
         </h3>
 
-        <p className="text-sm sm:text-base text-gray-600 mb-4 line-clamp-3">
+        <p className="text-sm sm:text-base text-[#F3F4F6]/70 mb-4 line-clamp-3">
           {project.description}
         </p>
 
@@ -156,7 +156,7 @@ function PortfolioCard({ project }: { project: PortfolioItem }) {
           {project.technologies.map((tech) => (
             <span
               key={tech}
-              className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
+              className="text-xs bg-[#FACC15]/10 text-[#FACC15] border border-[#FACC15]/30 px-2 py-1 rounded"
             >
               {tech}
             </span>
@@ -170,31 +170,31 @@ function PortfolioCard({ project }: { project: PortfolioItem }) {
 // Portfolio Stats Component
 function PortfolioStats() {
   return (
-    <div className="mt-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white">
+    <div className="mt-20 bg-gradient-to-r from-[#FACC15] to-[#FACC15]/80 rounded-3xl p-12 text-[#0F0F0F]">
       <div className="grid md:grid-cols-4 gap-8 text-center">
         <div>
           <div className="text-4xl font-light mb-2">
             {portfolioStats.projectsDelivered}+
           </div>
-          <div className="text-blue-100">Projects Delivered</div>
+          <div className="text-[#0F0F0F]/70">Projects Delivered</div>
         </div>
         <div>
           <div className="text-4xl font-light mb-2">
             {portfolioStats.clientSatisfaction}%
           </div>
-          <div className="text-blue-100">Client Satisfaction</div>
+          <div className="text-[#0F0F0F]/70">Client Satisfaction</div>
         </div>
         <div>
           <div className="text-4xl font-light mb-2">
             {portfolioStats.industriesServed}+
           </div>
-          <div className="text-blue-100">Industries Served</div>
+          <div className="text-[#0F0F0F]/70">Industries Served</div>
         </div>
         <div>
           <div className="text-4xl font-light mb-2">
             {portfolioStats.yearsExperience}+
           </div>
-          <div className="text-blue-100">Years Experience</div>
+          <div className="text-[#0F0F0F]/70">Years Experience</div>
         </div>
       </div>
     </div>
@@ -204,20 +204,20 @@ function PortfolioStats() {
 // Case Study CTA Component
 function CaseStudyCTA() {
   return (
-    <div className="mt-12 sm:mt-16 text-center bg-gray-50 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
-      <h3 className="text-2xl sm:text-3xl font-light text-gray-900 mb-4">
+    <div className="mt-12 sm:mt-16 text-center bg-[#0F0F0F]/50 border border-[#F3F4F6]/10 rounded-2xl sm:rounded-3xl p-8 sm:p-12">
+      <h3 className="text-2xl sm:text-3xl font-light text-[#F3F4F6] mb-4">
         Want to See Detailed Case Studies?
       </h3>
-      <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 max-w-2xl mx-auto">
+      <p className="text-base sm:text-lg text-[#F3F4F6]/70 mb-6 sm:mb-8 max-w-2xl mx-auto">
         Explore in-depth breakdowns of how I approached complex business
         problems, the technical solutions implemented, and the measurable
         results achieved.
       </p>
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 sm:px-8 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 transform text-sm sm:text-base">
+        <button className="bg-[#FACC15] hover:bg-[#FACC15]/90 text-[#0F0F0F] px-6 sm:px-8 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105 transform text-sm sm:text-base">
           View Case Studies →
         </button>
-        <button className="border border-gray-300 hover:border-gray-400 hover:bg-gray-100 text-gray-700 px-6 sm:px-8 py-3 rounded-xl font-medium transition-all duration-300 text-sm sm:text-base">
+        <button className="border border-[#F3F4F6]/30 hover:border-[#FACC15] hover:bg-[#F3F4F6]/5 text-[#F3F4F6] px-6 sm:px-8 py-3 rounded-xl font-medium transition-all duration-300 text-sm sm:text-base">
           Download Portfolio PDF
         </button>
       </div>

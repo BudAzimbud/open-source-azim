@@ -164,21 +164,21 @@ export default function ArticleDetail({
     <>
       <Navigation />
 
-      <div className="min-h-screen bg-gray-50 pt-16">
+      <div className="min-h-screen bg-[#0F0F0F] pt-16">
         {/* Article Header */}
-        <div className="bg-white">
+        <div className="bg-[#0F0F0F]/80 backdrop-blur-sm">
           <div className="max-w-4xl mx-auto px-6 py-12">
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-              <Link href="/" className="hover:text-blue-600">
+            <nav className="flex items-center gap-2 text-sm text-[#F3F4F6]/60 mb-8">
+              <Link href="/" className="hover:text-[#FACC15]">
                 Home
               </Link>
               <span>→</span>
-              <Link href="/article" className="hover:text-blue-600">
+              <Link href="/article" className="hover:text-[#FACC15]">
                 Articles
               </Link>
               <span>→</span>
-              <span className="text-gray-900">{article.category}</span>
+              <span className="text-[#F3F4F6]">{article.category}</span>
             </nav>
 
             {/* Article Meta */}
@@ -190,38 +190,38 @@ export default function ArticleDetail({
               >
                 {article.category}
               </span>
-              <span className="text-gray-500 text-sm">
+              <span className="text-[#F3F4F6]/50 text-sm">
                 {article.publishedAt}
               </span>
-              <span className="text-gray-500 text-sm">•</span>
-              <span className="text-gray-500 text-sm">
+              <span className="text-[#F3F4F6]/50 text-sm">•</span>
+              <span className="text-[#F3F4F6]/50 text-sm">
                 {article.readTime} read
               </span>
-              <span className="text-gray-500 text-sm">•</span>
-              <span className="text-gray-500 text-sm">
+              <span className="text-[#F3F4F6]/50 text-sm">•</span>
+              <span className="text-[#F3F4F6]/50 text-sm">
                 by {article.author.name}
               </span>
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-[#F3F4F6] leading-tight mb-6">
               {article.title}
             </h1>
 
             {/* Excerpt */}
-            <p className="text-xl text-gray-600 leading-relaxed mb-8">
+            <p className="text-xl text-[#F3F4F6]/70 leading-relaxed mb-8">
               {article.excerpt}
             </p>
 
             {/* Article Actions */}
-            <div className="flex items-center justify-between py-6 border-y border-gray-200">
+            <div className="flex items-center justify-between py-6 border-y border-[#F3F4F6]/10">
               <div className="flex items-center gap-6">
                 <button
                   onClick={handleLike}
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all duration-300 ${
                     liked
-                      ? "bg-red-50 text-red-600 border-2 border-red-200"
-                      : "bg-gray-50 text-gray-600 border-2 border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+                      ? "bg-red-500/20 text-red-400 border-2 border-red-400/50"
+                      : "bg-[#F3F4F6]/5 text-[#F3F4F6]/70 border-2 border-[#F3F4F6]/20 hover:bg-red-500/20 hover:text-red-400 hover:border-red-400/50"
                   }`}
                 >
                   <svg
@@ -244,8 +244,8 @@ export default function ArticleDetail({
                   onClick={() => setBookmarked(!bookmarked)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-all duration-300 ${
                     bookmarked
-                      ? "bg-blue-50 text-blue-600 border-2 border-blue-200"
-                      : "bg-gray-50 text-gray-600 border-2 border-gray-200 hover:bg-blue-50 hover:text-blue-600 hover:border-blue-200"
+                      ? "bg-[#FACC15]/20 text-[#FACC15] border-2 border-[#FACC15]/50"
+                      : "bg-[#F3F4F6]/5 text-[#F3F4F6]/70 border-2 border-[#F3F4F6]/20 hover:bg-[#FACC15]/20 hover:text-[#FACC15] hover:border-[#FACC15]/50"
                   }`}
                 >
                   <svg
@@ -266,7 +266,7 @@ export default function ArticleDetail({
 
                 <button
                   onClick={handleShare}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium bg-gray-50 text-gray-600 border-2 border-gray-200 hover:bg-gray-100 transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl font-medium bg-[#F3F4F6]/5 text-[#F3F4F6]/70 border-2 border-[#F3F4F6]/20 hover:bg-[#F3F4F6]/10 transition-colors"
                 >
                   <svg
                     className="w-5 h-5"
@@ -285,7 +285,7 @@ export default function ArticleDetail({
                 </button>
               </div>
 
-              <div className="flex items-center gap-4 text-sm text-gray-500">
+              <div className="flex items-center gap-4 text-sm text-[#F3F4F6]/50">
                 <div className="flex items-center gap-1">
                   <svg
                     className="w-4 h-4"
@@ -331,9 +331,9 @@ export default function ArticleDetail({
 
         {/* Article Content */}
         <div className="max-w-4xl mx-auto px-6 py-12">
-          <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+          <div className="bg-[#F3F4F6]/5 backdrop-blur-sm border border-[#F3F4F6]/10 rounded-3xl shadow-lg overflow-hidden">
             {/* Featured Image */}
-            <div className="relative h-64 md:h-96 bg-gradient-to-br from-blue-500 to-purple-600">
+            <div className="relative h-64 md:h-96 bg-gradient-to-br from-[#FACC15] to-[#F59E0B]">
               <Image
                 src={article.image}
                 alt={article.title}
@@ -346,14 +346,14 @@ export default function ArticleDetail({
             <div className="p-8 md:p-12">
               <div className="prose prose-lg max-w-none">
                 {/* In a real app, you'd use a markdown parser like react-markdown */}
-                <div className="whitespace-pre-wrap leading-relaxed text-gray-800">
+                <div className="whitespace-pre-wrap leading-relaxed text-[#F3F4F6]/80">
                   <ReactMarkdown>{article.content}</ReactMarkdown>
                 </div>
               </div>
 
               {/* Tags */}
-              <div className="mt-12 pt-8 border-t border-gray-200">
-                <h3 className="text-sm font-medium text-gray-700 mb-4">
+              <div className="mt-12 pt-8 border-t border-[#F3F4F6]/10">
+                <h3 className="text-sm font-medium text-[#F3F4F6]/80 mb-4">
                   Tags:
                 </h3>
                 <div className="flex flex-wrap gap-2">
@@ -361,7 +361,7 @@ export default function ArticleDetail({
                     <Link
                       key={tag}
                       href={`/article?tag=${tag}`}
-                      className="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-lg hover:bg-blue-200 transition-colors"
+                      className="px-3 py-1 bg-[#FACC15]/20 text-[#FACC15] border border-[#FACC15]/30 text-sm rounded-lg hover:bg-[#FACC15]/30 transition-colors"
                     >
                       #{tag}
                     </Link>
@@ -374,7 +374,7 @@ export default function ArticleDetail({
 
         {/* Author Info */}
         <div className="max-w-4xl mx-auto px-6 pb-8">
-          <div className="bg-white rounded-2xl p-8 shadow-sm">
+          <div className="bg-[#F3F4F6]/5 backdrop-blur-sm border border-[#F3F4F6]/10 rounded-2xl p-8 shadow-sm">
             <div className="flex items-center gap-6">
               <div className="w-16 h-16 relative rounded-full overflow-hidden">
                 <Image
@@ -385,22 +385,22 @@ export default function ArticleDetail({
                 />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-xl font-semibold text-[#F3F4F6] mb-2">
                   About {article.author.name}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-[#F3F4F6]/70 leading-relaxed">
                   {article.author.bio}
                 </p>
                 <div className="flex gap-4 mt-4">
                   <Link
                     href="/about"
-                    className="text-blue-600 hover:text-blue-700 font-medium"
+                    className="text-[#FACC15] hover:text-[#FACC15]/80 font-medium"
                   >
                     View Profile →
                   </Link>
                   <Link
                     href="/article"
-                    className="text-blue-600 hover:text-blue-700 font-medium"
+                    className="text-[#FACC15] hover:text-[#FACC15]/80 font-medium"
                   >
                     More Articles →
                   </Link>
@@ -412,13 +412,13 @@ export default function ArticleDetail({
 
         {/* Related Articles */}
         <div className="max-w-4xl mx-auto px-6 pb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
+          <h2 className="text-2xl font-bold text-[#F3F4F6] mb-8">
             Related Articles
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {relatedArticles.map((article) => (
               <Link key={article.id} href={`/article/${article.slug}`}>
-                <div className="bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.02] overflow-hidden">
+                <div className=" rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 hover:scale-[1.02] overflow-hidden">
                   <div className="relative h-32 bg-gradient-to-br from-blue-500 to-purple-600">
                     <Image
                       src={article.image}
@@ -435,13 +435,13 @@ export default function ArticleDetail({
                     >
                       {article.category}
                     </span>
-                    <h3 className="font-semibold text-gray-900 mb-2 leading-tight">
+                    <h3 className="font-semibold text-white mb-2 leading-tight">
                       {article.title}
                     </h3>
-                    <p className="text-gray-600 text-sm mb-3">
+                    <p className="text-gray-50 text-sm mb-3">
                       {article.excerpt}
                     </p>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-gray-100">
                       {article.readTime} read
                     </div>
                   </div>

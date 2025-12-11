@@ -24,7 +24,7 @@ export default function Navigation() {
       {/* Floating Navigation Bar */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-gradient-to-r from-gray-500 to-gray-50 " : ""
+          isScrolled ? "bg-[#0F0F0F]/95 backdrop-blur-lg shadow-lg" : ""
         }`}
       >
         <div className="max-w-7xl mx-auto px-6">
@@ -33,7 +33,9 @@ export default function Navigation() {
             <Link href="/" className="flex items-center space-x-3 group">
               <span
                 className={`font-bold text-xl transition-colors duration-300 ${
-                  isScrolled ? "text-gray-900" : "text-white drop-shadow-lg"
+                  isScrolled
+                    ? "text-[#FACC15]"
+                    : "text-[#F3F4F6] drop-shadow-lg"
                 }`}
               >
                 Azim
@@ -46,8 +48,8 @@ export default function Navigation() {
                 href="/"
                 className={`transition-all duration-300 hover:scale-105 font-medium ${
                   isActive("/")
-                    ? "text-white font-semibold"
-                    : "text-black drop-shadow-md hover:text-blue-200"
+                    ? "text-[#FACC15] font-semibold"
+                    : "text-[#F3F4F6] drop-shadow-md hover:text-[#FACC15]/80"
                 }`}
               >
                 Home
@@ -56,8 +58,8 @@ export default function Navigation() {
                 href="/article"
                 className={`transition-all duration-300 hover:scale-105 font-medium ${
                   isActive("/article")
-                    ? "text-white-600 font-semibold"
-                    : "text-black drop-shadow-md hover:text-blue-200"
+                    ? "text-[#FACC15] font-semibold"
+                    : "text-[#F3F4F6] drop-shadow-md hover:text-[#FACC15]/80"
                 }`}
               >
                 Articles
@@ -67,8 +69,8 @@ export default function Navigation() {
                 href="/workspace"
                 className={`px-6 py-2.5 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg ${
                   isScrolled
-                    ? "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-xl"
-                    : "bg-blue-600/90 text-white border border-blue-500/50 hover:bg-blue-700 hover:border-blue-400 hover:shadow-xl"
+                    ? "bg-[#FACC15] text-[#0F0F0F] hover:bg-[#FACC15]/90 hover:shadow-xl"
+                    : "bg-[#FACC15]/90 text-[#0F0F0F] border border-[#FACC15]/50 hover:bg-[#FACC15] hover:border-[#FACC15] hover:shadow-xl"
                 }`}
               >
                 Explore Workspaces →
@@ -80,8 +82,8 @@ export default function Navigation() {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`md:hidden p-2 rounded-lg transition-colors duration-300 ${
                 isScrolled
-                  ? "text-gray-700 hover:bg-gray-100"
-                  : "text-white hover:bg-white/20 drop-shadow-md"
+                  ? "text-[#F3F4F6] hover:bg-[#F3F4F6]/10"
+                  : "text-[#F3F4F6] hover:bg-[#F3F4F6]/20 drop-shadow-md"
               }`}
             >
               <svg
@@ -112,14 +114,14 @@ export default function Navigation() {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-white/98 backdrop-blur-lg border-t border-gray-200/70 shadow-lg">
+          <div className="md:hidden bg-[#0F0F0F]/98 backdrop-blur-lg border-t border-[#F3F4F6]/20 shadow-lg">
             <div className="px-6 py-4 space-y-4">
               <Link
                 href="/"
                 className={`block py-3 px-2 rounded-lg transition-all duration-300 ${
                   isActive("/")
-                    ? "text-blue-600 font-semibold bg-blue-50"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                    ? "text-[#FACC15] font-semibold bg-[#FACC15]/10"
+                    : "text-[#F3F4F6] hover:text-[#FACC15] hover:bg-[#F3F4F6]/10"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -129,8 +131,8 @@ export default function Navigation() {
                 href="/article"
                 className={`block py-3 px-2 rounded-lg transition-all duration-300 ${
                   isActive("/article")
-                    ? "text-blue-600 font-semibold bg-blue-50"
-                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                    ? "text-[#FACC15] font-semibold bg-[#FACC15]/10"
+                    : "text-[#F3F4F6] hover:text-[#FACC15] hover:bg-[#F3F4F6]/10"
                 }`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -138,14 +140,14 @@ export default function Navigation() {
               </Link>
               <Link
                 href="/portfolio"
-                className="block py-3 px-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-all duration-300"
+                className="block py-3 px-2 rounded-lg text-[#F3F4F6] hover:text-[#FACC15] hover:bg-[#F3F4F6]/10 transition-all duration-300"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Portfolio
               </Link>
               <Link
                 href="#contact"
-                className="block py-3 px-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-gray-50 transition-all duration-300"
+                className="block py-3 px-2 rounded-lg text-[#F3F4F6] hover:text-[#FACC15] hover:bg-[#F3F4F6]/10 transition-all duration-300"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Contact
@@ -154,7 +156,7 @@ export default function Navigation() {
               {/* Mobile Workspace CTA */}
               <Link
                 href="/workspace"
-                className="block mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-semibold text-center transition-all duration-300 hover:from-blue-700 hover:to-blue-800 shadow-lg hover:shadow-xl"
+                className="block mt-6 px-6 py-3 bg-[#FACC15] text-[#0F0F0F] rounded-xl font-semibold text-center transition-all duration-300 hover:bg-[#FACC15]/90 shadow-lg hover:shadow-xl"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Explore Workspaces →
@@ -168,11 +170,11 @@ export default function Navigation() {
       <div className="fixed bottom-6 right-6 z-40">
         <Link
           href="/workspace"
-          className="group flex items-center space-x-3 bg-white/95 backdrop-blur-lg border border-gray-200/70 rounded-2xl px-4 py-3 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+          className="group flex items-center space-x-3 bg-[#0F0F0F]/95 backdrop-blur-lg border border-[#FACC15]/50 rounded-2xl px-4 py-3 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
         >
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
+          <div className="w-10 h-10 bg-[#FACC15] rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
             <svg
-              className="w-5 h-5 text-white"
+              className="w-5 h-5 text-[#0F0F0F]"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -186,10 +188,10 @@ export default function Navigation() {
             </svg>
           </div>
           <div className="text-right">
-            <div className="text-sm font-semibold text-gray-900">
+            <div className="text-sm font-semibold text-[#F3F4F6]">
               Workspaces
             </div>
-            <div className="text-xs text-gray-600">Explore setups</div>
+            <div className="text-xs text-[#F3F4F6]/70">Explore setups</div>
           </div>
         </Link>
       </div>

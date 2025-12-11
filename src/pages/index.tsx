@@ -88,7 +88,7 @@ export default function Home() {
       <Navigation />
 
       {/* Hero Section */}
-      <div className="relative bg-radial from-blue-700 to-gray-50 min-h-screen overflow-hidden">
+      <div className="relative bg-[#0F0F0F] min-h-screen overflow-hidden">
         {/* Background Images with Transition */}
         {services.map((service, index) => (
           <div
@@ -103,7 +103,7 @@ export default function Home() {
 
         {/* Overlay */}
         <div
-          className={`absolute inset-0 bg-black/40 transition-opacity duration-600 ${
+          className={`absolute inset-0 bg-[#0F0F0F]/60 transition-opacity duration-600 ${
             isAnimating ? "opacity-20" : "opacity-100"
           }`}
         ></div>
@@ -121,17 +121,21 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <div className="inline-flex items-center space-x-2 bg-black/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm">
-                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                    <span>Available for new projects</span>
+                  <div className="inline-flex items-center space-x-2 bg-[#F3F4F6]/10 backdrop-blur-sm rounded-full px-4 py-2 text-sm">
+                    <span className="w-2 h-2 bg-[#FACC15] rounded-full animate-pulse"></span>
+                    <span className="text-[#F3F4F6]">
+                      Available for new projects
+                    </span>
                   </div>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-light leading-tight">
+                <h1 className="text-5xl md:text-7xl font-light leading-tight text-[#F3F4F6]">
                   AZIM{" "}
-                  <span className="font-normal">— Fullstack Developer</span>
+                  <span className="font-normal text-[#FACC15]">
+                    — Fullstack Developer
+                  </span>
                 </h1>
-                <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-2xl">
+                <p className="text-xl md:text-2xl text-[#F3F4F6]/80 leading-relaxed max-w-2xl">
                   Fullstack Developer with 4+ years of experience building
                   scalable web and mobile applications across SaaS, fintech, and
                   enterprise ecosystems. Skilled in API design, real-time
@@ -143,14 +147,14 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row gap-4 pt-6">
                   <a
                     href="#footer"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 hover:scale-105 transform text-lg block text-center"
+                    className="bg-[#FACC15] hover:bg-[#FACC15]/90 text-[#0F0F0F] px-8 py-4 rounded-xl font-medium transition-all duration-300 hover:scale-105 transform text-lg block text-center"
                     style={{ scrollBehavior: "smooth" }}
                   >
                     Contact Me
                   </a>
                   <a
                     href="#footer"
-                    className="border border-white/30 hover:border-white/50 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 text-lg block text-center"
+                    className="border border-[#F3F4F6]/30 hover:border-[#FACC15] hover:bg-[#FACC15]/10 text-[#F3F4F6] px-8 py-4 rounded-xl font-medium transition-all duration-300 text-lg block text-center"
                     style={{ scrollBehavior: "smooth" }}
                   >
                     Download CV
@@ -165,17 +169,17 @@ export default function Home() {
                     <div
                       key={service.id}
                       onClick={() => handleCardClick(index)}
-                      className={`bg-white/10 backdrop-blur-sm rounded-2xl p-6 cursor-pointer transition-all duration-500 hover:bg-white/20 hover:scale-105 hover:-translate-y-2 border border-white/20 ${
+                      className={`bg-[#F3F4F6]/10 backdrop-blur-sm rounded-2xl p-6 cursor-pointer transition-all duration-500 hover:bg-[#FACC15]/20 hover:scale-105 hover:-translate-y-2 border border-[#F3F4F6]/20 ${
                         index === currentSlide
-                          ? "ring-2 ring-blue-400 bg-white/20"
+                          ? "ring-2 ring-[#FACC15] bg-[#FACC15]/20"
                           : ""
                       }`}
                     >
                       <div className="text-3xl mb-3">{service.icon}</div>
-                      <h3 className="text-white font-semibold mb-2 text-lg">
+                      <h3 className="text-[#F3F4F6] font-semibold mb-2 text-lg">
                         {service.title}
                       </h3>
-                      <p className="text-gray-300 text-sm leading-relaxed">
+                      <p className="text-[#F3F4F6]/70 text-sm leading-relaxed">
                         {service.description}
                       </p>
                     </div>
@@ -183,8 +187,8 @@ export default function Home() {
                 </div>
 
                 {/* Floating Elements */}
-                <div className="absolute -top-4 -right-4 w-20 h-20 bg-blue-400/20 rounded-full blur-xl animate-pulse"></div>
-                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-purple-400/20 rounded-full blur-xl animate-pulse delay-1000"></div>
+                <div className="absolute -top-4 -right-4 w-20 h-20 bg-[#FACC15]/20 rounded-full blur-xl animate-pulse"></div>
+                <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-[#FACC15]/20 rounded-full blur-xl animate-pulse delay-1000"></div>
               </div>
             </div>
           </div>
@@ -194,13 +198,13 @@ export default function Home() {
       <PortfolioSection />
 
       {/* Skills Section */}
-      <section className="bg-white">
-        <div className="max-w-6xl mx-auto ">
+      <section className="bg-[#0F0F0F] py-20">
+        <div className="max-w-6xl mx-auto px-8">
           <h2
-            className="text-3xl md:text-4xl font-bold mb-8 bg-gradient-to-r from-blue-300 via-blue-400 to-purple-400 bg-clip-text text-transparent"
+            className="text-3xl md:text-4xl font-bold mb-8 text-[#FACC15]"
             style={{
               backgroundImage:
-                "linear-gradient(90deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%)",
+                "linear-gradient(90deg, #FACC15 0%, #FACC15 50%, #FACC15 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
@@ -211,20 +215,16 @@ export default function Home() {
             {Object.entries(skills).map(([category, items]) => (
               <div
                 key={category}
-                style={{
-                  background:
-                    "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)",
-                }}
-                className="rounded-xl p-6 shadow-lg border border-white/10"
+                className="bg-[#0F0F0F] border border-[#FACC15]/30 rounded-xl p-6 shadow-lg"
               >
-                <h3 className="text-xl font-semibold mb-3 capitalize text-blue-200">
+                <h3 className="text-xl font-semibold mb-3 capitalize text-[#FACC15]">
                   {category}
                 </h3>
                 <ul className="flex flex-wrap gap-2">
                   {items.map((skill: string) => (
                     <li
                       key={skill}
-                      className="bg-blue-800/30 text-blue-100 px-3 py-1 rounded-full text-sm font-medium"
+                      className="bg-[#FACC15]/10 text-green border border-[#FACC15]/30 px-3 py-1 rounded-full text-sm font-medium"
                     >
                       {skill}
                     </li>
@@ -239,22 +239,24 @@ export default function Home() {
       <ExperienceSection />
 
       {/* Certification Section */}
-      <section className="py-20 bg-gray-950 text-white">
+      <section className="py-20 bg-[#0F0F0F] text-[#F3F4F6]">
         <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-blue-400">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-[#FACC15]">
             Certifications
           </h2>
           <div className="grid md:grid-cols-2 gap-8">
             {certifications.map((cert) => (
               <div
                 key={cert.id}
-                className="bg-white/5 rounded-xl p-6 border border-white/10 shadow-lg"
+                className="bg-[#0F0F0F] border border-[#FACC15]/30 rounded-xl p-6 shadow-lg"
               >
-                <h3 className="text-xl font-semibold text-blue-300 mb-2">
+                <h3 className="text-xl font-semibold text-[#FACC15] mb-2">
                   {cert.name}
                 </h3>
-                <div className="text-blue-100 text-sm mb-1">{cert.issuer}</div>
-                <div className="text-gray-400 text-xs">{cert.year}</div>
+                <div className="text-[#F3F4F6]/80 text-sm mb-1">
+                  {cert.issuer}
+                </div>
+                <div className="text-[#F3F4F6]/50 text-xs">{cert.year}</div>
               </div>
             ))}
           </div>

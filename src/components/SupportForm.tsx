@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 interface SupportFormProps {
   onSuccess?: (data: any) => void;
@@ -10,59 +10,79 @@ interface SupportData {
   amount: number;
   message: string;
   email: string;
-  paymentMethod: 'midtrans' | 'xendit' | 'paypal' | 'stripe' | 'qris';
+  paymentMethod: "midtrans" | "xendit" | "paypal" | "stripe" | "qris";
 }
 
 const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
   const [formData, setFormData] = useState<SupportData>({
-    name: '',
+    name: "",
     amount: 5,
-    message: '',
-    email: '',
-    paymentMethod: 'midtrans'
+    message: "",
+    email: "",
+    paymentMethod: "midtrans",
   });
 
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
   const predefinedAmounts = [
-    { value: 5, label: 'Single Coffee', icon: '☕', description: 'A regular coffee' },
-    { value: 15, label: 'Coffee Boost', icon: '☕☕☕', description: 'Solid coding session', popular: true },
-    { value: 25, label: 'Coffee + Snack', icon: '☕🍰', description: 'Marathon debugging' },
+    {
+      value: 5,
+      label: "Single Coffee",
+      icon: "☕",
+      description: "A regular coffee",
+    },
+    {
+      value: 15,
+      label: "Coffee Boost",
+      icon: "☕☕☕",
+      description: "Solid coding session",
+      popular: true,
+    },
+    {
+      value: 25,
+      label: "Coffee + Snack",
+      icon: "☕🍰",
+      description: "Marathon debugging",
+    },
   ];
 
   const handleAmountSelect = (amount: number) => {
-    setFormData(prev => ({ ...prev, amount }));
+    setFormData((prev) => ({ ...prev, amount }));
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: name === 'amount' ? parseFloat(value) || 0 : value
+      [name]: name === "amount" ? parseFloat(value) || 0 : value,
     }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
-      onError?.('Please enter your name');
+      onError?.("Please enter your name");
       return;
     }
 
     if (formData.amount < 1) {
-      onError?.('Please enter a valid amount');
+      onError?.("Please enter a valid amount");
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch('/api/support', {
-        method: 'POST',
+      const response = await fetch("/api/support", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -73,17 +93,17 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
         onSuccess?.(result.data);
         setShowForm(false);
         setFormData({
-          name: '',
+          name: "",
           amount: 5,
-          message: '',
-          email: '',
-          paymentMethod: 'midtrans'
+          message: "",
+          email: "",
+          paymentMethod: "midtrans",
         });
       } else {
-        onError?.(result.error || 'Something went wrong');
+        onError?.(result.error || "Something went wrong");
       }
     } catch (error) {
-      onError?.('Network error. Please try again.');
+      onError?.("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -91,12 +111,12 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
 
   const simulatePayment = () => {
     // Simulasi redirect ke payment gateway
-    if (formData.paymentMethod === 'stripe') {
+    if (formData.paymentMethod === "stripe") {
       // Dalam production, gunakan Stripe Checkout
-      alert('Redirecting to Stripe Checkout...');
-    } else if (formData.paymentMethod === 'paypal') {
+      alert("Redirecting to Stripe Checkout...");
+    } else if (formData.paymentMethod === "paypal") {
       // Dalam production, gunakan PayPal SDK
-      alert('Redirecting to PayPal...');
+      alert("Redirecting to PayPal...");
     }
   };
 
@@ -106,28 +126,32 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
         {predefinedAmounts.map((option) => (
           <div
             key={option.value}
-            className={`bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-2 cursor-pointer ${
+            className={`bg-[#0F0F0F] border-2 rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 cursor-pointer ${
               option.popular
-                ? 'border-amber-300 relative'
-                : 'border-transparent hover:border-amber-200'
+                ? "border-[#FACC15] relative"
+                : "border-[#F3F4F6]/10 hover:border-[#FACC15]/50"
             }`}
             onClick={() => {
-              setFormData(prev => ({ ...prev, amount: option.value }));
+              setFormData((prev) => ({ ...prev, amount: option.value }));
               setShowForm(true);
             }}
           >
             {option.popular && (
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <span className="bg-amber-500 text-white px-4 py-2 rounded-full text-sm font-medium">
+                <span className="bg-[#FACC15] text-[#0F0F0F] px-4 py-2 rounded-full text-sm font-medium">
                   Popular
                 </span>
               </div>
             )}
             <div className="text-4xl mb-4">{option.icon}</div>
-            <h3 className="text-2xl font-semibold text-gray-900 mb-3">{option.label}</h3>
-            <div className="text-3xl font-light text-amber-600 mb-4">${option.value}</div>
-            <p className="text-gray-600 mb-6">{option.description}</p>
-            <button className="w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300">
+            <h3 className="text-2xl font-semibold text-[#F3F4F6] mb-3">
+              {option.label}
+            </h3>
+            <div className="text-3xl font-light text-[#FACC15] mb-4">
+              ${option.value}
+            </div>
+            <p className="text-[#F3F4F6]/70 mb-6">{option.description}</p>
+            <button className="w-full bg-[#FACC15] hover:bg-[#FACC15]/90 text-[#0F0F0F] font-medium py-3 px-6 rounded-xl transition-colors duration-300">
               Support with ${option.value}
             </button>
           </div>
@@ -137,17 +161,19 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
   }
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-3xl p-8 shadow-lg">
+    <div className="max-w-md mx-auto bg-[#0F0F0F] border border-[#F3F4F6]/10 rounded-3xl p-8 shadow-lg">
       <div className="text-center mb-6">
         <div className="text-4xl mb-4">☕</div>
-        <h3 className="text-2xl font-semibold text-gray-900 mb-2">Support My Work</h3>
-        <p className="text-gray-600">Thank you for your support!</p>
+        <h3 className="text-2xl font-semibold text-[#F3F4F6] mb-2">
+          Support My Work
+        </h3>
+        <p className="text-[#F3F4F6]/70">Thank you for your support!</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Amount Selection */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">
+          <label className="block text-sm font-medium text-[#F3F4F6] mb-3">
             Choose Amount
           </label>
           <div className="grid grid-cols-3 gap-3 mb-3">
@@ -158,8 +184,8 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
                 onClick={() => handleAmountSelect(option.value)}
                 className={`p-3 text-sm rounded-lg border-2 transition-colors ${
                   formData.amount === option.value
-                    ? 'border-amber-500 bg-amber-50 text-amber-700'
-                    : 'border-gray-200 hover:border-amber-300'
+                    ? "border-[#FACC15] bg-[#FACC15]/10 text-[#FACC15]"
+                    : "border-[#F3F4F6]/20 hover:border-[#FACC15]/50 text-[#F3F4F6]"
                 }`}
               >
                 <div className="text-lg mb-1">{option.icon}</div>
@@ -168,7 +194,7 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
             ))}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">Custom:</span>
+            <span className="text-sm text-[#F3F4F6]/70">Custom:</span>
             <input
               type="number"
               name="amount"
@@ -176,14 +202,14 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
               onChange={handleInputChange}
               min="1"
               step="0.01"
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+              className="flex-1 px-3 py-2 bg-[#0F0F0F]/50 border border-[#F3F4F6]/20 text-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-[#FACC15] focus:border-transparent"
             />
           </div>
         </div>
 
         {/* Name */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-[#F3F4F6] mb-2">
             Your Name *
           </label>
           <input
@@ -193,13 +219,13 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
             onChange={handleInputChange}
             required
             placeholder="Enter your name"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            className="w-full px-4 py-3 bg-[#0F0F0F]/50 border border-[#F3F4F6]/20 text-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-[#FACC15] focus:border-transparent placeholder-[#F3F4F6]/40"
           />
         </div>
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-[#F3F4F6] mb-2">
             Email (optional)
           </label>
           <input
@@ -208,13 +234,13 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
             value={formData.email}
             onChange={handleInputChange}
             placeholder="your@email.com"
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            className="w-full px-4 py-3 bg-[#0F0F0F]/50 border border-[#F3F4F6]/20 text-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-[#FACC15] focus:border-transparent placeholder-[#F3F4F6]/40"
           />
         </div>
 
         {/* Message */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-[#F3F4F6] mb-2">
             Message (optional)
           </label>
           <textarea
@@ -223,24 +249,28 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
             onChange={handleInputChange}
             rows={3}
             placeholder="Leave a nice message..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+            className="w-full px-4 py-3 bg-[#0F0F0F]/50 border border-[#F3F4F6]/20 text-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-[#FACC15] focus:border-transparent resize-none placeholder-[#F3F4F6]/40"
           />
         </div>
 
         {/* Payment Method */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-[#F3F4F6] mb-2">
             Payment Method
           </label>
           <select
             name="paymentMethod"
             value={formData.paymentMethod}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+            className="w-full px-4 py-3 bg-[#0F0F0F]/50 border border-[#F3F4F6]/20 text-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-[#FACC15] focus:border-transparent"
           >
-            <option value="midtrans">🇮🇩 Trakteer (QRIS, Bank Transfer, E-Wallet)</option>
+            <option value="midtrans">
+              🇮🇩 Trakteer (QRIS, Bank Transfer, E-Wallet)
+            </option>
             <option value="qris">🇮🇩 QRIS (Semua E-Wallet Indonesia)</option>
-            <option value="xendit">🇮🇩 E-Wallet (GoPay, OVO, Dana, ShopeePay)</option>
+            <option value="xendit">
+              🇮🇩 E-Wallet (GoPay, OVO, Dana, ShopeePay)
+            </option>
             <option value="paypal">🌍 Ko-fi (PayPal, Credit Card)</option>
             <option value="stripe">🌍 Buy Me A Coffee (Credit Card)</option>
           </select>
@@ -251,20 +281,35 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
           <button
             type="button"
             onClick={() => setShowForm(false)}
-            className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors duration-300"
+            className="flex-1 bg-[#F3F4F6]/10 hover:bg-[#F3F4F6]/20 text-[#F3F4F6] font-medium py-3 px-6 rounded-xl transition-colors duration-300"
           >
             Back
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="flex-2 bg-amber-500 hover:bg-amber-600 disabled:bg-amber-300 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2"
+            className="flex-2 bg-[#FACC15] hover:bg-[#FACC15]/90 disabled:bg-[#FACC15]/30 text-[#0F0F0F] font-medium py-3 px-6 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
-                <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" className="opacity-25" />
-                  <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" className="opacity-75" />
+                <svg
+                  className="animate-spin h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    className="opacity-25"
+                  />
+                  <path
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    className="opacity-75"
+                  />
                 </svg>
                 Processing...
               </>
@@ -276,10 +321,20 @@ const SupportForm: React.FC<SupportFormProps> = ({ onSuccess, onError }) => {
       </form>
 
       {/* Security Notice */}
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      <div className="mt-6 p-4 bg-[#F3F4F6]/5 border border-[#F3F4F6]/10 rounded-lg">
+        <div className="flex items-center gap-2 text-sm text-[#F3F4F6]/70">
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+            />
           </svg>
           <span>Secure payment processing. Your data is protected.</span>
         </div>
