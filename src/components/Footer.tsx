@@ -56,8 +56,44 @@ function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Contact</h4>
             <ul className="space-y-2">
-              <li className="text-gray-400">budazimbud@gmail.com</li>
-              <li className="text-gray-400">+62895323496371</li>
+              <li>
+                <a
+                  href="mailto:budazimbud@gmail.com"
+                  className="text-blue-400 hover:underline"
+                >
+                  budazimbud@gmail.com
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wa.me/62895323496371"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-400 hover:underline"
+                >
+                  WhatsApp: +62 895-3234-96371
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/azim-37a2ba358/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-300 hover:underline"
+                >
+                  LinkedIn: Azim .
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/BudAzimbud"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:underline"
+                >
+                  GitHub: BudAzimbud
+                </a>
+              </li>
               <li className="text-gray-400">Denpasar, Bali</li>
             </ul>
           </div>

@@ -141,12 +141,20 @@ export default function Home() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 hover:scale-105 transform text-lg">
+                  <a
+                    href="#footer"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 hover:scale-105 transform text-lg block text-center"
+                    style={{ scrollBehavior: "smooth" }}
+                  >
                     Contact Me
-                  </button>
-                  <button className="border border-white/30 hover:border-white/50 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 text-lg">
+                  </a>
+                  <a
+                    href="#footer"
+                    className="border border-white/30 hover:border-white/50 hover:bg-white/10 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 text-lg block text-center"
+                    style={{ scrollBehavior: "smooth" }}
+                  >
                     Download CV
-                  </button>
+                  </a>
                 </div>
               </div>
 
@@ -253,7 +261,9 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer />
+      <div id="footer">
+        <Footer />
+      </div>
     </div>
   );
 }
