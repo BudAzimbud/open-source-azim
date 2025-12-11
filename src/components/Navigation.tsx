@@ -24,26 +24,20 @@ export default function Navigation() {
       {/* Floating Navigation Bar */}
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-white/95 backdrop-blur-lg shadow-lg border-b border-gray-200/50"
-            : "bg-black backdrop-blur-md shadow-lg"
+          isScrolled ? "bg-gradient-to-r from-gray-500 to-gray-50 " : ""
         }`}
       >
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center space-x-3 group">
-              {isScrolled ? (
-                <span
-                  className={`font-bold text-xl transition-colors duration-300 ${
-                    isScrolled ? "text-gray-900" : "text-white drop-shadow-lg"
-                  }`}
-                >
-                  Portfolio's Azim
-                </span>
-              ) : (
-                <Image src="/azim.png" width={60} height={60} alt="logo" />
-              )}
+              <span
+                className={`font-bold text-xl transition-colors duration-300 ${
+                  isScrolled ? "text-gray-900" : "text-white drop-shadow-lg"
+                }`}
+              >
+                Azim
+              </span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -52,10 +46,8 @@ export default function Navigation() {
                 href="/"
                 className={`transition-all duration-300 hover:scale-105 font-medium ${
                   isActive("/")
-                    ? "text-blue-600 font-semibold"
-                    : isScrolled
-                    ? "text-gray-700 hover:text-blue-600"
-                    : "text-white drop-shadow-md hover:text-blue-200"
+                    ? "text-white font-semibold"
+                    : "text-black drop-shadow-md hover:text-blue-200"
                 }`}
               >
                 Home
@@ -64,33 +56,11 @@ export default function Navigation() {
                 href="/article"
                 className={`transition-all duration-300 hover:scale-105 font-medium ${
                   isActive("/article")
-                    ? "text-blue-600 font-semibold"
-                    : isScrolled
-                    ? "text-gray-700 hover:text-blue-600"
-                    : "text-white drop-shadow-md hover:text-blue-200"
+                    ? "text-white-600 font-semibold"
+                    : "text-black drop-shadow-md hover:text-blue-200"
                 }`}
               >
                 Articles
-              </Link>
-              <Link
-                href="/portfolio"
-                className={`transition-all duration-300 hover:scale-105 font-medium ${
-                  isScrolled
-                    ? "text-gray-700 hover:text-blue-600"
-                    : "text-white drop-shadow-md hover:text-blue-200"
-                }`}
-              >
-                Portfolio
-              </Link>
-              <Link
-                href="/#contact"
-                className={`transition-all duration-300 hover:scale-105 font-medium ${
-                  isScrolled
-                    ? "text-gray-700 hover:text-blue-600"
-                    : "text-white drop-shadow-md hover:text-blue-200"
-                }`}
-              >
-                Contact
               </Link>
 
               <Link

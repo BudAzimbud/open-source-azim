@@ -7,7 +7,7 @@ export interface PortfolioItem {
   categoryLabel: string;
   categoryColor: string;
   year: string;
-  image: string;
+  image?: string;
   tags: string[];
   link?: string;
   technologies: string[];
@@ -40,8 +40,6 @@ export const portfolioData: PortfolioItem[] = [
     categoryLabel: "Education",
     categoryColor: "blue",
     year: "2025",
-    image:
-      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop&crop=center",
     tags: ["LMS", "Education", "E-Learning"],
     technologies: ["ReactJS", "Node.js", "PostgreSQL", "PayPal"],
     link: "https://www.natalielejeuneosteopathy.com/",
@@ -78,8 +76,6 @@ export const portfolioData: PortfolioItem[] = [
     categoryLabel: "Insurance",
     categoryColor: "purple",
     year: "2024",
-    image:
-      "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=400&fit=crop&crop=center",
     tags: ["Insurance", "FinTech", "Claims"],
     link: "https://www.life.id",
     technologies: ["React Native", "NextJS", "Tailwind CSS"],
@@ -92,10 +88,8 @@ export const portfolioData: PortfolioItem[] = [
       "Secure electronic health records system with patient management, appointment scheduling, and medical history tracking for healthcare providers.",
     category: "healthcare",
     categoryLabel: "Healthcare",
-    categoryColor: "pink",
+    categoryColor: "blue",
     year: "2024",
-    image:
-      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=600&h=400&fit=crop&crop=center",
     tags: ["Healthcare", "EHR", "Medical"],
     link: "https://dimedika.id",
     technologies: ["Next.js", "Node.js", "MongoDB"],
@@ -123,7 +117,7 @@ export const portfolioData: PortfolioItem[] = [
       "Advanced investment platform with portfolio management, real-time market data, risk analysis, and automated trading strategies for investors.",
     category: "fintech",
     categoryLabel: "FinTech",
-    categoryColor: "emerald",
+    categoryColor: "green",
     year: "2023",
     image:
       "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop&crop=center",
@@ -138,12 +132,38 @@ export const portfolioData: PortfolioItem[] = [
       "Modern POS system with inventory management, sales analytics, customer loyalty programs, and multi-payment gateway integration for retail businesses.",
     category: "retail",
     categoryLabel: "Retail",
-    categoryColor: "teal",
+    categoryColor: "red",
     year: "2022",
-    image:
-      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop&crop=center",
     tags: ["POS", "Retail", "Inventory"],
     technologies: ["ReactJS", "Electron", "NodeJS"],
+  },
+  {
+    id: 8,
+    slug: "msteams-azim",
+    title: "msteams-azim — Microsoft Teams API Wrapper (NPM)",
+    description:
+      "Open-source Node.js package for seamless integration with Microsoft Teams APIs, enabling bots, messaging, and automation for business workflows.",
+    category: "opensource",
+    categoryLabel: "Open Source",
+    categoryColor: "blue",
+    year: "2025",
+    tags: ["NPM", "Microsoft Teams", "API", "Open Source"],
+    link: "https://www.npmjs.com/package/msteams-azim",
+    technologies: ["Node.js", "TypeScript", "Microsoft Teams API"],
+  },
+  {
+    id: 9,
+    slug: "docusign-azim",
+    title: "docusign-azim — DocuSign API Wrapper (NPM)",
+    description:
+      "Node.js package for DocuSign API integration, simplifying e-signature workflows and document automation for web and enterprise apps.",
+    category: "opensource",
+    categoryLabel: "Open Source",
+    categoryColor: "blue",
+    year: "2025",
+    tags: ["NPM", "DocuSign", "API", "Open Source"],
+    link: "https://www.npmjs.com/package/docusign-azim",
+    technologies: ["Node.js", "TypeScript", "DocuSign API"],
   },
 ];
 

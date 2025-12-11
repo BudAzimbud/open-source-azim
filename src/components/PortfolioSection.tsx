@@ -11,10 +11,12 @@ import {
 export default function PortfolioSection() {
   const [activeFilter, setActiveFilter] = useState("All Projects");
 
-  const filteredPortfolio = portfolioData.filter((project) => {
-    if (activeFilter === "All Projects") return true;
-    return project.categoryLabel === activeFilter;
-  });
+  const filteredPortfolio = portfolioData
+    .sort((a, b) => +b.year - +a.year)
+    .filter((project) => {
+      if (activeFilter === "All Projects") return true;
+      return project.categoryLabel === activeFilter;
+    });
 
   return (
     <section className="py-20 bg-white">
@@ -30,15 +32,12 @@ export default function PortfolioSection() {
           </p>
         </div>
 
-
         {/* Portfolio Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {filteredPortfolio.map((project) => (
             <PortfolioCard key={project.id} project={project} />
           ))}
         </div>
-
-
       </div>
     </section>
   );
@@ -49,12 +48,31 @@ function PortfolioCard({ project }: { project: PortfolioItem }) {
   return (
     <div className="group bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
       <div className="relative overflow-hidden h-48 sm:h-64">
-        <Image
-          src={project.image}
-          alt={project.title}
-          fill
-          className="object-cover transition-transform duration-700 group-hover:scale-110"
-        />
+        {project.image ? (
+          <Image
+            src={project.image}
+            alt={project.title}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
+          />
+        ) : (
+          <div
+            style={{
+              backgroundImage:
+                "linear-gradient(90deg, #60a5fa 0%, #818cf8 50%, #a78bfa 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+            }}
+            className="flex items-center justify-center h-full w-full text-white text-4xl font-bold select-none"
+          >
+            {project.title
+              .split(" ")
+              .map((w) => w[0])
+              .join("")
+              .slice(0, 1)
+              .toUpperCase()}
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
         {/* Hover Actions */}
@@ -148,8 +166,6 @@ function PortfolioCard({ project }: { project: PortfolioItem }) {
     </div>
   );
 }
-
-
 
 // Portfolio Stats Component
 function PortfolioStats() {

@@ -22,8 +22,8 @@ export const experienceData: Experience[] = [
     company: "B ONE CONSULTING",
     position: "Fullstack Developer",
     location: "Bali, Indonesia",
-    period: "Feb 2024 - Present",
-    startDate: "2024-02",
+    period: "Feb 2025 - Present",
+    startDate: "2025-02",
     endDate: "present",
     isCurrent: true,
     type: "full-time",
@@ -63,9 +63,9 @@ export const experienceData: Experience[] = [
     company: "Self-Employed",
     position: "Freelance Fullstack Developer",
     location: "Remote",
-    period: "Feb 2023 - Feb 2024",
-    startDate: "2023-02",
-    endDate: "2024-02",
+    period: "Feb 2024 - Feb 2025",
+    startDate: "2024-02",
+    endDate: "2025-02",
     isCurrent: false,
     type: "freelance",
     description:
@@ -104,9 +104,9 @@ export const experienceData: Experience[] = [
     company: "IFG LIFE (Jiwasraya)",
     position: "Frontend Developer",
     location: "Jakarta, Indonesia",
-    period: "Feb 2022 - Feb 2023",
-    startDate: "2022-02",
-    endDate: "2023-02",
+    period: "Feb 2023 - Feb 2024",
+    startDate: "2023-02",
+    endDate: "2024-02",
     isCurrent: false,
     type: "full-time",
     companyUrl: "https://www.life.id",
@@ -142,9 +142,9 @@ export const experienceData: Experience[] = [
     company: "Walden Global Service",
     position: "Fullstack Developer",
     location: "Bandung, Indonesia",
-    period: "Feb 2021 - Feb 2022",
-    startDate: "2021-02",
-    endDate: "2022-02",
+    period: "Feb 2022 - Feb 2023",
+    startDate: "2022-02",
+    endDate: "2023-02",
     isCurrent: false,
     type: "full-time",
     description:
@@ -180,9 +180,9 @@ export const experienceData: Experience[] = [
     company: "Sopwer Teknologi Indonesia",
     position: "Fullstack Developer",
     location: "Bandung, Indonesia",
-    period: "Oct 2020 - Feb 2021",
-    startDate: "2020-10",
-    endDate: "2021-02",
+    period: "Oct 2021 - Feb 2022",
+    startDate: "2021-10",
+    endDate: "2022-02",
     isCurrent: false,
     type: "full-time",
     description:
@@ -330,13 +330,6 @@ export const certifications = [
     year: "2021",
   },
 ];
-
-export const education = {
-  institution: "Bina Sarana Informatika",
-  degree: "Informatics",
-  period: "2023 - Present",
-  status: "In Progress",
-};
 
 export const softSkills = [
   "Agile & Scrum",
