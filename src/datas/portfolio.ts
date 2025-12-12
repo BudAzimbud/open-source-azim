@@ -305,7 +305,7 @@ export const portfolioData: PortfolioItem[] = [
     category: "ecommerce",
     categoryLabel: "E-commerce",
     categoryColor: "orange",
-    year: "2024",
+    year: "2023",
     tags: ["E-commerce", "Kids", "Books", "Education"],
     technologies: ["ExpressJS", "Mongoose", "MongoDB", "Big Query", "Redis"],
   },
