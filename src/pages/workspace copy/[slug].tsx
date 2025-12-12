@@ -1235,6 +1235,146 @@ export default function Store() {
           </div>
         </div>
 
+        {/* Workspace Info Section */}
+        <div className="max-w-7xl mx-auto px-8 py-8">
+          <div className="bg-[#F3F4F6]/5 backdrop-blur-sm border border-[#F3F4F6]/10 rounded-2xl p-8 shadow-sm mb-8">
+            <div className="grid md:grid-cols-3 gap-8">
+              {/* Workspace Details */}
+              <div className="md:col-span-2">
+                <h2 className="text-2xl font-semibold text-[#F3F4F6] mb-4">
+                  {workspace?.title || "Workspace"}
+                </h2>
+                <p className="text-[#F3F4F6]/70 mb-6 leading-relaxed">
+                  {workspace?.description || "No description available."}
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-[#F3F4F6]/5 border border-[#F3F4F6]/10 rounded-lg p-4">
+                    <h3 className="font-medium text-[#F3F4F6] mb-2">
+                      Setup Type
+                    </h3>
+                    <p className="text-[#F3F4F6]/70">
+                      {workspace?.category || "-"}
+                    </p>
+                  </div>
+                  <div className="bg-[#F3F4F6]/5 border border-[#F3F4F6]/10 rounded-lg p-4">
+                    <h3 className="font-medium text-[#F3F4F6] mb-2">
+                      Total Items
+                    </h3>
+                    <p className="text-[#F3F4F6]/70">
+                      {workspace?.itemCount ?? editableObjects.length}{" "}
+                      components
+                    </p>
+                  </div>
+                  <div className="bg-[#F3F4F6]/5 border border-[#F3F4F6]/10 rounded-lg p-4">
+                    <h3 className="font-medium text-[#F3F4F6] mb-2">
+                      Last Updated
+                    </h3>
+                    <p className="text-[#F3F4F6]/70">
+                      {workspace?.lastUpdated
+                        ? new Date(workspace.lastUpdated).toLocaleDateString(
+                            "en-US",
+                            {
+                              year: "numeric",
+                              month: "long",
+                            }
+                          )
+                        : "-"}
+                    </p>
+                  </div>
+                  <div className="bg-[#F3F4F6]/5 border border-[#F3F4F6]/10 rounded-lg p-4">
+                    <h3 className="font-medium text-[#F3F4F6] mb-2">Tags</h3>
+                    <p className="text-[#F3F4F6]/70">
+                      {workspace?.tags?.join(", ") || "-"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Stats */}
+              <div>
+                <h3 className="text-lg font-semibold text-[#F3F4F6] mb-4">
+                  Quick Stats
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#F3F4F6]/60">👁️ Views</span>
+                    <span className="font-medium text-[#F3F4F6]">2,847</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#F3F4F6]/60">❤️ Likes</span>
+                    <span className="font-medium text-[#F3F4F6]">156</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#F3F4F6]/60">💬 Comments</span>
+                    <span className="font-medium text-[#F3F4F6]">23</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#F3F4F6]/60">🔖 Bookmarks</span>
+                    <span className="font-medium text-[#F3F4F6]">89</span>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="mt-6 space-y-3">
+                  <button className="w-full bg-[#FACC15] hover:bg-[#FACC15]/90 text-[#0F0F0F] py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                      />
+                    </svg>
+                    Like This Setup
+                  </button>
+                  <button className="w-full border border-[#F3F4F6]/20 hover:border-[#FACC15] bg-[#F3F4F6]/5 hover:bg-[#F3F4F6]/10 text-[#F3F4F6] py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                      />
+                    </svg>
+                    Bookmark
+                  </button>
+                  <button className="w-full border border-[#F3F4F6]/20 hover:border-[#FACC15] bg-[#F3F4F6]/5 hover:bg-[#F3F4F6]/10 text-[#F3F4F6] py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                      />
+                    </svg>
+                    Share Setup
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Comments Section */}
+        <div className="max-w-7xl mx-auto px-8 pb-12">
+          <CommentSection workspaceId="current-workspace" />
+        </div>
+
         <Footer />
       </div>
     </>

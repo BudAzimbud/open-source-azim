@@ -3,57 +3,76 @@ import Link from "next/link";
 import Image from "next/image";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
-import { workspaceList } from "@/datas/workspace";
-
-// Sample data - ini akan berisi data workspace yang tersedia
-const workspaceData = workspaceList;
+import { portfolioData } from "@/datas/portfolio";
 
 const categories = [
-  "All",
-  "Gaming",
-  "Productivity",
-  "Streaming",
-  "Development",
-  "Design",
-  "Mobile",
+  "All Projects",
+  "Marketplace",
+  "Education",
+  "Enterprise",
+  "Insurance",
+  "Healthcare",
+  "HR",
+  "FinTech",
+  "Retail",
+  "Logistics",
+  "PropTech",
+  "Analytics",
+  "E-commerce",
+  "Government",
+  "Fitness",
+  "IoT",
+  "Open Source",
 ];
 
 export default function WorkspaceList() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [sortBy, setSortBy] = useState("featured");
+  const [selectedCategory, setSelectedCategory] = useState("All Projects");
+  const [sortBy, setSortBy] = useState("newest");
 
   // Filter dan sort data
-  const filteredWorkspaces = workspaceData
-    .filter((workspace) => {
+  const filteredProjects = portfolioData
+    .filter((project) => {
       const matchesSearch =
-        workspace.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        workspace.description
-          .toLowerCase()
-          .includes(searchQuery.toLowerCase()) ||
-        workspace.tags.some((tag) =>
+        project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        project.tags.some((tag) =>
           tag.toLowerCase().includes(searchQuery.toLowerCase())
+        ) ||
+        project.technologies.some((tech) =>
+          tech.toLowerCase().includes(searchQuery.toLowerCase())
         );
       const matchesCategory =
-        selectedCategory === "All" || workspace.category === selectedCategory;
+        selectedCategory === "All Projects" ||
+        project.categoryLabel === selectedCategory;
       return matchesSearch && matchesCategory;
     })
     .sort((a, b) => {
-      if (sortBy === "featured") {
-        if (a.featured && !b.featured) return -1;
-        if (!a.featured && b.featured) return 1;
-        return (
-          new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime()
-        );
-      }
-      if (sortBy === "newest")
-        return (
-          new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime()
-        );
-      if (sortBy === "items") return b.itemCount - a.itemCount;
+      if (sortBy === "newest") return +b.year - +a.year;
+      if (sortBy === "oldest") return +a.year - +b.year;
       if (sortBy === "name") return a.title.localeCompare(b.title);
+      if (sortBy === "company")
+        return (a.company || "").localeCompare(b.company || "");
       return 0;
     });
+
+  // Group by company
+  const groupedByCompany = filteredProjects.reduce((acc, project) => {
+    const company = project.company || "Other Projects";
+    if (!acc[company]) {
+      acc[company] = [];
+    }
+    acc[company].push(project);
+    return acc;
+  }, {} as Record<string, typeof portfolioData>);
+
+  const sortedCompanies = Object.keys(groupedByCompany).sort((a, b) => {
+    if (a === "B ONE CONSULTING") return -1;
+    if (b === "B ONE CONSULTING") return 1;
+    if (a === "Personal Project") return 1;
+    if (b === "Personal Project") return -1;
+    return a.localeCompare(b);
+  });
 
   return (
     <div className="min-h-screen bg-[#0F0F0F]">
@@ -64,12 +83,12 @@ export default function WorkspaceList() {
       <div className="pt-20 pb-12 bg-gradient-to-br from-[#FACC15] via-[#FACC15]/90 to-[#FACC15]/80">
         <div className="max-w-7xl mx-auto px-8 text-center">
           <h1 className="text-5xl md:text-6xl font-light text-[#0F0F0F] mb-6">
-            Workspace Collection
+            Portfolio Collection
           </h1>
           <p className="text-xl text-[#0F0F0F]/80 max-w-3xl mx-auto">
-            Discover amazing workspace setups from around the world. Get
-            inspired by gaming rigs, productivity stations, streaming studios,
-            and more.
+            Explore my comprehensive portfolio of enterprise solutions, mobile
+            apps, and web platforms. From healthcare to fintech, each project
+            showcases innovation and technical excellence.
           </p>
         </div>
       </div>
@@ -94,7 +113,7 @@ export default function WorkspaceList() {
               d="M9 5l7 7-7 7"
             />
           </svg>
-          <span className="text-[#F3F4F6] font-medium">Workspaces</span>
+          <span className="text-[#F3F4F6] font-medium">Portfolio</span>
         </nav>
 
         <div className="flex flex-col lg:flex-row gap-6 items-center justify-between">
@@ -118,7 +137,7 @@ export default function WorkspaceList() {
               </div>
               <input
                 type="text"
-                placeholder="Search workspaces, tools, or tags..."
+                placeholder="Search projects, technologies, or tags..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 bg-[#0F0F0F]/50 border border-[#F3F4F6]/20 text-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-[#FACC15] focus:border-transparent placeholder-[#F3F4F6]/40"
@@ -127,8 +146,8 @@ export default function WorkspaceList() {
           </div>
 
           {/* Category Filter */}
-          <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
+          <div className="flex flex-wrap gap-2 max-w-2xl">
+            {categories.slice(0, 6).map((category) => (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
@@ -141,6 +160,28 @@ export default function WorkspaceList() {
                 {category}
               </button>
             ))}
+            {categories.length > 6 && (
+              <div className="relative group">
+                <button className="px-4 py-2 rounded-lg font-medium bg-[#0F0F0F] border border-[#F3F4F6]/20 text-[#F3F4F6] hover:bg-[#F3F4F6]/10 transition-colors">
+                  More...
+                </button>
+                <div className="absolute top-full mt-2 right-0 bg-[#0F0F0F] border border-[#F3F4F6]/20 rounded-lg shadow-xl p-2 hidden group-hover:block z-10 min-w-[180px]">
+                  {categories.slice(6).map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category)}
+                      className={`w-full text-left px-3 py-2 rounded transition-colors ${
+                        selectedCategory === category
+                          ? "bg-[#FACC15] text-[#0F0F0F]"
+                          : "text-[#F3F4F6] hover:bg-[#F3F4F6]/10"
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Sort Options */}
@@ -149,10 +190,10 @@ export default function WorkspaceList() {
             onChange={(e) => setSortBy(e.target.value)}
             className="px-4 py-3 bg-[#0F0F0F] border border-[#F3F4F6]/20 text-[#F3F4F6] rounded-lg focus:ring-2 focus:ring-[#FACC15] focus:border-transparent"
           >
-            <option value="featured">Featured First</option>
             <option value="newest">Newest First</option>
-            <option value="items">Most Items</option>
+            <option value="oldest">Oldest First</option>
             <option value="name">Name A-Z</option>
+            <option value="company">By Company</option>
           </select>
         </div>
       </div>
@@ -163,10 +204,10 @@ export default function WorkspaceList() {
           <p className="text-[#F3F4F6]/70">
             Showing{" "}
             <span className="font-medium text-[#F3F4F6]">
-              {filteredWorkspaces.length}
+              {filteredProjects.length}
             </span>{" "}
-            workspaces
-            {selectedCategory !== "All" && (
+            projects
+            {selectedCategory !== "All Projects" && (
               <>
                 {" "}
                 in{" "}
@@ -185,162 +226,49 @@ export default function WorkspaceList() {
         </div>
       </div>
 
-      {/* Workspace Grid */}
-      <div className="max-w-7xl mx-auto px-8 mb-12">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredWorkspaces.map((workspace) => (
-            <div
-              key={workspace.id}
-              className="group bg-[#0F0F0F] border border-[#F3F4F6]/10 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:border-[#FACC15]/50 transition-all duration-500 hover:-translate-y-2"
-            >
-              <div className="relative overflow-hidden">
-                <Image
-                  src={workspace.image}
-                  alt={workspace.title}
-                  width={600}
-                  height={400}
-                  className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="flex space-x-4">
-                    <Link
-                      href={`/workspace/${workspace.id}`}
-                      className="bg-[#FACC15]/90 backdrop-blur-sm rounded-full p-3 text-[#0F0F0F] hover:bg-[#FACC15] transition-colors"
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </Link>
-                    <button className="bg-[#FACC15]/90 backdrop-blur-sm rounded-full p-3 text-[#0F0F0F] hover:bg-[#FACC15] transition-colors">
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Featured Badge */}
-                {workspace.featured && (
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-[#FACC15] text-[#0F0F0F] px-3 py-1 rounded-full text-sm font-medium shadow-lg">
-                      Featured
-                    </span>
-                  </div>
-                )}
-
-                {/* Category Badge */}
-                <div className="absolute top-4 right-4">
-                  <span className="bg-[#0F0F0F]/90 backdrop-blur-sm text-[#F3F4F6] px-3 py-1 rounded-full text-sm font-medium">
-                    {workspace.category}
+      {/* Portfolio Grid - Grouped by Company */}
+      {sortBy === "company" ? (
+        <div className="max-w-7xl mx-auto px-8 mb-12 space-y-12">
+          {sortedCompanies.map((company) => (
+            <div key={company}>
+              {/* Company Header */}
+              <div className="mb-6">
+                <div className="flex items-center gap-4">
+                  <div className="h-1 w-16 bg-[#FACC15] rounded-full"></div>
+                  <h3 className="text-3xl font-light text-[#F3F4F6]">
+                    {company}
+                  </h3>
+                  <div className="h-px flex-1 bg-[#F3F4F6]/10"></div>
+                  <span className="text-sm text-[#F3F4F6]/50">
+                    {groupedByCompany[company].length}{" "}
+                    {groupedByCompany[company].length === 1
+                      ? "project"
+                      : "projects"}
                   </span>
                 </div>
               </div>
 
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-xl font-semibold text-[#F3F4F6] group-hover:text-[#FACC15] transition-colors">
-                    {workspace.title}
-                  </h3>
-                  <span className="text-sm text-[#F3F4F6]/50">
-                    {workspace.itemCount} items
-                  </span>
-                </div>
-
-                <p className="text-[#F3F4F6]/70 mb-4 leading-relaxed">
-                  {workspace.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {workspace.tags.slice(0, 3).map((tag, index) => (
-                    <span
-                      key={index}
-                      className="text-xs bg-[#FACC15]/10 text-[#FACC15] border border-[#FACC15]/30 px-2 py-1 rounded-full hover:bg-[#FACC15]/20 transition-colors"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                  {workspace.tags.length > 3 && (
-                    <span className="text-xs bg-[#FACC15]/10 text-[#FACC15] border border-[#FACC15]/30 px-2 py-1 rounded-full">
-                      +{workspace.tags.length - 3} more
-                    </span>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-[#F3F4F6]/50">
-                    Updated{" "}
-                    {new Date(workspace.lastUpdated).toLocaleDateString()}
-                  </span>
-                  <Link
-                    href={`/workspace/${workspace.id}`}
-                    className="inline-flex items-center text-[#FACC15] hover:text-[#FACC15]/80 font-medium transition-colors duration-300 group-hover:scale-105 transform"
-                  >
-                    View Details →
-                  </Link>
-                </div>
+              {/* Projects Grid */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {groupedByCompany[company].map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
               </div>
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Floating Action Button */}
-      <div className="fixed bottom-6 right-6 z-40">
-        <Link
-          href="/submit-workspace"
-          className="group flex items-center space-x-3 bg-gradient-to-r from-[#FACC15] to-[#FACC15]/90 text-[#0F0F0F] rounded-2xl px-6 py-4 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-        >
-          <div className="w-10 h-10 bg-[#0F0F0F]/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-            <svg
-              className="w-5 h-5 text-[#0F0F0F]"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-              />
-            </svg>
+      ) : (
+        <div className="max-w-7xl mx-auto px-8 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
           </div>
-          <div className="text-right">
-            <div className="text-sm font-medium">Submit Your</div>
-            <div className="text-sm font-medium">Workspace</div>
-          </div>
-        </Link>
-      </div>
+        </div>
+      )}
 
       {/* Empty State */}
-      {filteredWorkspaces.length === 0 && (
+      {filteredProjects.length === 0 && (
         <div className="max-w-7xl mx-auto px-8 py-20 text-center">
           <div className="w-24 h-24 bg-[#F3F4F6]/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <svg
@@ -358,28 +286,28 @@ export default function WorkspaceList() {
             </svg>
           </div>
           <h3 className="text-2xl font-semibold text-[#F3F4F6] mb-4">
-            No workspaces found
+            No projects found
           </h3>
           <p className="text-[#F3F4F6]/70 mb-8 max-w-md mx-auto">
             {searchQuery
-              ? `No workspaces match "${searchQuery}". Try adjusting your search terms.`
-              : `No workspaces found in ${selectedCategory}. Try selecting a different category.`}
+              ? `No projects match "${searchQuery}". Try adjusting your search terms.`
+              : `No projects found in ${selectedCategory}. Try selecting a different category.`}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => {
                 setSearchQuery("");
-                setSelectedCategory("All");
+                setSelectedCategory("All Projects");
               }}
               className="bg-[#FACC15] hover:bg-[#FACC15]/90 text-[#0F0F0F] px-6 py-3 rounded-xl font-medium transition-colors"
             >
               Clear Filters
             </button>
             <Link
-              href="/workspace"
+              href="/"
               className="border border-[#F3F4F6]/30 hover:border-[#FACC15] text-[#F3F4F6] px-6 py-3 rounded-xl font-medium transition-colors"
             >
-              Browse All
+              Back to Home
             </Link>
           </div>
         </div>
@@ -387,5 +315,190 @@ export default function WorkspaceList() {
 
       <Footer />
     </div>
+  );
+}
+
+// Project Card Component
+function ProjectCard({ project }: { project: (typeof portfolioData)[0] }) {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = Array.isArray(project.image)
+    ? project.image
+    : project.image
+    ? [project.image]
+    : [];
+
+  const hasMultipleImages = images.length > 1;
+  const hasLink = Boolean(project.link);
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  return (
+    <Link href={`/portfolio/${project.slug}`} className="block">
+      <div className="group bg-[#0F0F0F] border border-[#F3F4F6]/10 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:border-[#FACC15]/50 transition-all duration-500 hover:-translate-y-2 cursor-pointer">
+        <div className="relative overflow-hidden h-64">
+          {images.length > 0 ? (
+            <>
+              <Image
+                src={images[currentImageIndex]}
+                alt={project.title}
+                width={600}
+                height={400}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+
+              {/* Image Navigation for Multiple Images */}
+              {hasMultipleImages && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      prevImage();
+                    }}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-[#0F0F0F]/80 hover:bg-[#FACC15] text-[#F3F4F6] hover:text-[#0F0F0F] rounded-full p-2 transition-all duration-300 z-10 backdrop-blur-sm opacity-0 group-hover:opacity-100"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      nextImage();
+                    }}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-[#0F0F0F]/80 hover:bg-[#FACC15] text-[#F3F4F6] hover:text-[#0F0F0F] rounded-full p-2 transition-all duration-300 z-10 backdrop-blur-sm opacity-0 group-hover:opacity-100"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+
+                  {/* Image Indicators */}
+                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                    {images.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          setCurrentImageIndex(index);
+                        }}
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                          index === currentImageIndex
+                            ? "bg-[#FACC15] w-6"
+                            : "bg-[#F3F4F6]/50 hover:bg-[#F3F4F6]"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
+          ) : (
+            <div className="flex items-center justify-center h-full w-full bg-[#0F0F0F] text-4xl font-bold select-none text-[#FACC15]">
+              {project.title
+                .split(" ")
+                .map((w) => w[0])
+                .join("")
+                .slice(0, 2)
+                .toUpperCase()}
+            </div>
+          )}
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+          {/* Category Badge */}
+          <div className="absolute top-4 right-4">
+            <span className="bg-[#0F0F0F]/90 backdrop-blur-sm text-[#F3F4F6] px-3 py-1 rounded-full text-sm font-medium">
+              {project.categoryLabel}
+            </span>
+          </div>
+
+          {/* Year Badge */}
+          <div className="absolute top-4 left-4">
+            <span className="bg-[#FACC15] text-[#0F0F0F] px-3 py-1 rounded-full text-sm font-medium shadow-lg">
+              {project.year}
+            </span>
+          </div>
+        </div>
+
+        <div className="p-6">
+          <div className="flex items-start justify-between mb-3">
+            <div className="flex-1">
+              <h3 className="text-xl font-semibold text-[#F3F4F6] group-hover:text-[#FACC15] transition-colors line-clamp-2 mb-1">
+                {project.title}
+              </h3>
+              <span className="text-sm text-[#F3F4F6]/50">
+                {project.company}
+              </span>
+            </div>
+          </div>
+
+          <p className="text-[#F3F4F6]/70 mb-4 leading-relaxed line-clamp-3">
+            {project.description}
+          </p>
+
+          <div className="flex flex-wrap gap-2 mb-4">
+            {project.technologies.slice(0, 3).map((tech, index) => (
+              <span
+                key={index}
+                className="text-xs bg-[#FACC15]/10 text-[#FACC15] border border-[#FACC15]/30 px-2 py-1 rounded hover:bg-[#FACC15]/20 transition-colors"
+              >
+                {tech}
+              </span>
+            ))}
+            {project.technologies.length > 3 && (
+              <span className="text-xs bg-[#FACC15]/10 text-[#FACC15] border border-[#FACC15]/30 px-2 py-1 rounded">
+                +{project.technologies.length - 3} more
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex flex-wrap gap-1">
+              {project.tags.slice(0, 2).map((tag, index) => (
+                <span
+                  key={index}
+                  className="text-xs text-[#F3F4F6]/50 bg-[#F3F4F6]/5 px-2 py-1 rounded"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+            <span className="inline-flex items-center text-[#FACC15] hover:text-[#FACC15]/80 font-medium transition-colors duration-300 group-hover:scale-105 transform text-sm">
+              View Details →
+            </span>
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 }

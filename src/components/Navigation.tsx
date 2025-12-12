@@ -73,7 +73,7 @@ export default function Navigation() {
                     : "bg-[#FACC15]/90 text-[#0F0F0F] border border-[#FACC15]/50 hover:bg-[#FACC15] hover:border-[#FACC15] hover:shadow-xl"
                 }`}
               >
-                Explore Workspaces →
+                Explore Portfolio →
               </Link>
             </div>
 

@@ -12,6 +12,7 @@ export interface PortfolioItem {
   link?: string;
   technologies: string[];
   company?: string;
+  responsibilities?: string[];
 }
 
 export const portfolioData: PortfolioItem[] = [
@@ -30,6 +31,14 @@ export const portfolioData: PortfolioItem[] = [
     tags: ["E-commerce", "Delivery", "Mobile App", "Multi-Region"],
     link: "https://theplugapp.com",
     technologies: ["Flutter", "Next.js", "Express.js", "Xendit"],
+    responsibilities: [
+      "Developed cross-platform mobile app using Flutter for iOS and Android",
+      "Implemented multi-region marketplace with region-specific features (Bali, Miami, Brazil)",
+      "Integrated Xendit payment gateway for secure transactions",
+      "Built real-time order tracking and delivery management system",
+      "Designed and implemented gym membership management module",
+      "Created responsive admin dashboard using Next.js",
+    ],
   },
   {
     id: 1,
@@ -46,6 +55,14 @@ export const portfolioData: PortfolioItem[] = [
     tags: ["LMS", "Education", "E-Learning"],
     technologies: ["ReactJS", "Node.js", "PostgreSQL", "PayPal"],
     link: "https://www.natalielejeuneosteopathy.com/",
+    responsibilities: [
+      "Architected and developed full-stack LMS platform using ReactJS and Node.js",
+      "Implemented course management system with multimedia content support",
+      "Built student progress tracking and analytics dashboard",
+      "Integrated PayPal payment gateway for course enrollment",
+      "Developed assignment submission and grading system",
+      "Created interactive learning modules with video and quiz functionality",
+    ],
   },
 
   {
@@ -75,6 +92,14 @@ export const portfolioData: PortfolioItem[] = [
       "DocuSign",
       "Microsoft Calendar",
     ],
+    responsibilities: [
+      "Led front-end development using Vue.js with component-based architecture",
+      "Built lead management and sales pipeline tracking system",
+      "Integrated DocuSign API for automated contract signing workflows",
+      "Implemented Microsoft Calendar integration for meeting scheduling",
+      "Developed customer analytics dashboard with real-time reporting",
+      "Created automated marketing campaign management tools",
+    ],
   },
   {
     id: 3,
@@ -91,6 +116,14 @@ export const portfolioData: PortfolioItem[] = [
     tags: ["Insurance", "FinTech", "Claims"],
     link: "https://www.life.id",
     technologies: ["React Native", "NextJS", "Tailwind CSS", "Redux Saga"],
+    responsibilities: [
+      "Developed mobile app using React Native for insurance policy management",
+      "Built customer portal with NextJS and Tailwind CSS",
+      "Implemented claims processing workflow with automated status tracking",
+      "Integrated Redux Saga for complex state management",
+      "Created automated underwriting system with business rule engine",
+      "Developed secure document upload and verification features",
+    ],
   },
   {
     id: 4,
@@ -107,6 +140,14 @@ export const portfolioData: PortfolioItem[] = [
     tags: ["Healthcare", "EHR", "Medical"],
     link: "https://dimedika.id",
     technologies: ["Next.js", "Node.js", "MongoDB", "SHADCN UI"],
+    responsibilities: [
+      "Architected secure electronic health records system using Next.js",
+      "Implemented HIPAA-compliant patient data management",
+      "Built appointment scheduling system with calendar integration",
+      "Developed medical history tracking with version control",
+      "Created responsive UI using SHADCN UI components",
+      "Integrated MongoDB for flexible medical data storage",
+    ],
   },
   {
     id: 5,
@@ -137,6 +178,14 @@ export const portfolioData: PortfolioItem[] = [
       "PlopJS",
       "AWS",
     ],
+    responsibilities: [
+      "Developed comprehensive HRIS platform using Vue.js and ExpressJS",
+      "Built automated payroll processing system with tax calculations",
+      "Implemented employee performance tracking and review workflows",
+      "Created recruitment module with applicant tracking system",
+      "Developed automated CronJob for scheduled tasks (payroll, reports)",
+      "Deployed and maintained application on AWS infrastructure",
+    ],
   },
   {
     id: 6,
@@ -153,6 +202,14 @@ export const portfolioData: PortfolioItem[] = [
       "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&h=400&fit=crop&crop=center",
     tags: ["Investment", "Trading", "Finance"],
     technologies: ["ReactJS", "PlopJS", "Material UI", "Micro frontend"],
+    responsibilities: [
+      "Built investment management platform using micro frontend architecture",
+      "Developed portfolio management dashboard with real-time data visualization",
+      "Implemented risk analysis tools and investment performance tracking",
+      "Created modular UI components using Material UI",
+      "Integrated real-time market data feeds for live portfolio updates",
+      "Used PlopJS for code generation and consistent project structure",
+    ],
   },
   {
     id: 7,
@@ -168,6 +225,14 @@ export const portfolioData: PortfolioItem[] = [
     year: "2022",
     tags: ["POS", "Retail", "Inventory"],
     technologies: ["ReactJS", "Electron", "NodeJS"],
+    responsibilities: [
+      "Developed cross-platform desktop POS application using Electron",
+      "Built inventory management system with real-time stock tracking",
+      "Implemented sales analytics and reporting dashboard",
+      "Created customer loyalty program with points and rewards system",
+      "Integrated multiple payment gateway options for flexible transactions",
+      "Designed offline-first architecture for uninterrupted operations",
+    ],
   },
   {
     id: 8,
@@ -184,6 +249,14 @@ export const portfolioData: PortfolioItem[] = [
     tags: ["NPM", "Microsoft Teams", "API", "Open Source"],
     link: "https://www.npmjs.com/package/msteams-azim",
     technologies: ["Node.js", "TypeScript", "Microsoft Teams API"],
+    responsibilities: [
+      "Developed and published open-source NPM package for Microsoft Teams integration",
+      "Created TypeScript wrapper for Microsoft Teams APIs with type safety",
+      "Implemented bot messaging and automation features",
+      "Wrote comprehensive documentation and usage examples",
+      "Designed developer-friendly API interface for easy integration",
+      "Maintained package with regular updates and bug fixes",
+    ],
   },
   {
     id: 9,
@@ -200,6 +273,14 @@ export const portfolioData: PortfolioItem[] = [
     tags: ["NPM", "DocuSign", "API", "Open Source"],
     link: "https://www.npmjs.com/package/docusign-azim",
     technologies: ["Node.js", "TypeScript", "DocuSign API"],
+    responsibilities: [
+      "Created open-source NPM package for DocuSign API integration",
+      "Built TypeScript wrapper with comprehensive type definitions",
+      "Implemented e-signature workflows and document automation features",
+      "Simplified complex DocuSign API into developer-friendly methods",
+      "Published detailed documentation with code examples",
+      "Provided ongoing support and updates for community users",
+    ],
   },
   {
     id: 10,
@@ -215,6 +296,14 @@ export const portfolioData: PortfolioItem[] = [
     year: "2022",
     tags: ["POS", "Desktop App", "Inventory", "Offline-First"],
     technologies: ["ReactJS", "Electron", "NodeJS"],
+    responsibilities: [
+      "Developed desktop POS application using ReactJS and Electron",
+      "Implemented offline-first architecture with local data synchronization",
+      "Built real-time inventory tracking with automatic stock alerts",
+      "Created comprehensive sales reporting and analytics features",
+      "Developed customer management system with purchase history",
+      "Ensured cross-platform compatibility (Windows, macOS, Linux)",
+    ],
   },
   {
     id: 11,
@@ -230,6 +319,14 @@ export const portfolioData: PortfolioItem[] = [
     year: "2022",
     tags: ["WMS", "Warehouse", "Logistics", "Inventory"],
     technologies: ["ReactJS", "Bootstrap", "NodeJS", "PostgreSQL"],
+    responsibilities: [
+      "Developed warehouse management system for seafood distribution",
+      "Implemented inventory tracking with cold storage temperature monitoring",
+      "Built order fulfillment workflow with barcode scanning integration",
+      "Created shipment logistics management with real-time tracking",
+      "Designed stock level alert system for inventory optimization",
+      "Developed reporting dashboard for warehouse performance metrics",
+    ],
   },
   {
     id: 12,
@@ -245,6 +342,14 @@ export const portfolioData: PortfolioItem[] = [
     year: "2021",
     tags: ["Property Management", "Tenant", "Real Estate", "Web App"],
     technologies: ["ReactJS", "Node.js", "MongoDB", "Nest.js"],
+    responsibilities: [
+      "Developed property management platform using ReactJS and Nest.js",
+      "Built tenant management system with lease agreement tracking",
+      "Implemented payment tracking and automated rent reminders",
+      "Created maintenance request workflow with status tracking",
+      "Designed communication portal for property owners and tenants",
+      "Integrated MongoDB for flexible property data management",
+    ],
   },
   {
     id: 13,
@@ -260,6 +365,14 @@ export const portfolioData: PortfolioItem[] = [
     year: "2022",
     tags: ["Forecasting", "Machine Learning", "Analytics", "Supply Chain"],
     technologies: ["ReactJS", "Python", "TensorFlow", "Node.js", "PostgreSQL"],
+    responsibilities: [
+      "Developed demand forecasting system using machine learning models",
+      "Implemented predictive analytics using Python and TensorFlow",
+      "Built data visualization dashboard with ReactJS for forecast insights",
+      "Created historical data analysis tools for pattern recognition",
+      "Integrated supply chain optimization algorithms",
+      "Designed system to analyze seasonal trends and market dynamics",
+    ],
   },
   {
     id: 14,
@@ -276,6 +389,14 @@ export const portfolioData: PortfolioItem[] = [
     year: "2023",
     tags: ["E-commerce", "Kids", "Books", "Education"],
     technologies: ["ReactJS", "Node.js", "React Native", "Frappe"],
+    responsibilities: [
+      "Developed e-commerce platform for children's books using ReactJS",
+      "Built mobile app with React Native for iOS and Android",
+      "Implemented age-based book recommendation engine",
+      "Created curated collections and educational content categorization",
+      "Integrated secure payment gateway for safe transactions",
+      "Designed parent-friendly interface for easy book discovery",
+    ],
   },
   {
     id: 15,
@@ -292,6 +413,14 @@ export const portfolioData: PortfolioItem[] = [
     year: "2024",
     tags: ["Government", "Registration", "Admin Portal", "Malaysia"],
     technologies: ["RefineJS", "ReactJS", "Material UI"],
+    responsibilities: [
+      "Developed government portal using RefineJS framework",
+      "Built society registration system with document upload functionality",
+      "Implemented administrative workflows for JPPM officers",
+      "Created secure user authentication and role-based access control",
+      "Designed Material UI-based interface for government standards",
+      "Developed document management system with version control",
+    ],
   },
   {
     id: 16,
@@ -308,6 +437,14 @@ export const portfolioData: PortfolioItem[] = [
     year: "2023",
     tags: ["Fitness", "AI", "Health", "Mobile App"],
     technologies: ["ExpressJS", "Mongoose", "MongoDB", "Big Query", "Redis"],
+    responsibilities: [
+      "Developed AI-powered fitness recommendation engine using machine learning",
+      "Built backend API with ExpressJS and MongoDB for data processing",
+      "Implemented real-time performance tracking for 10+ fitness metrics",
+      "Integrated Big Query for advanced analytics and data insights",
+      "Used Redis for caching and real-time data synchronization",
+      "Created personalized workout generation algorithms",
+    ],
   },
   {
     id: 17,
@@ -324,6 +461,14 @@ export const portfolioData: PortfolioItem[] = [
     year: "2024",
     tags: ["IoT", "Mobile App", "Vending Machine", "Smart Device"],
     technologies: ["Flutter", "Golang", "DIO", "AWS", "PostgreSQL"],
+    responsibilities: [
+      "Developed IoT-enabled mobile app using Flutter for vending machines",
+      "Built backend services with Golang for real-time machine monitoring",
+      "Implemented cashless payment integration for seamless transactions",
+      "Created inventory tracking system with low-stock alerts",
+      "Integrated AWS IoT Core for device communication and management",
+      "Developed customer management features with purchase history",
+    ],
   },
 ];
 
