@@ -104,7 +104,7 @@ export const portfolioData: PortfolioItem[] = [
   {
     id: 3,
     slug: "life-id-insurance",
-    company: "IFG LIFE (Jiwasraya)",
+    company: "Barrans Global Mandiri",
     title: "Life Id - Insurance Management System",
     description:
       "Complete insurance platform with policy management, claims processing, customer portal, and automated underwriting for insurance companies.",
