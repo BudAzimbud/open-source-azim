@@ -140,7 +140,7 @@ export const experienceData: Experience[] = [
   {
     id: 4,
     company: "Walden Global Service",
-    position: "Fullstack Developer",
+    position: "Software Engineer",
     location: "Bandung, Indonesia",
     period: "Feb 2022 - Feb 2023",
     startDate: "2022-02",
