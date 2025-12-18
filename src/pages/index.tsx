@@ -136,12 +136,15 @@ export default function Home() {
                   </span>
                 </h1>
                 <p className="text-xl md:text-2xl text-[#F3F4F6]/80 leading-relaxed max-w-2xl">
-                  Fullstack Developer with 4+ years of experience building
-                  scalable web and mobile applications across SaaS, fintech, and
-                  enterprise ecosystems. Skilled in API design, real-time
-                  synchronization, automation systems, and third-party
-                  integrations. Focused on clean architecture, performance
-                  optimization, and impactful delivery.
+                  Fullstack Developer with hands-on experience building and
+                  maintaining production-grade web and mobile applications
+                  across fintech, HRIS, fitness, and healthcare industries.
+                  Proficient in TypeScript, NestJS, REST APIs, PostgreSQL, and
+                  MongoDB, with proven experience integrating third-party
+                  services, payment gateways, and cloud infrastructure. Strong
+                  in translating business requirements into scalable,
+                  maintainable solutions and collaborating with cross-functional
+                  teams to deliver high-impact products.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-6">
